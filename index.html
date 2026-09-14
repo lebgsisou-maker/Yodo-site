@@ -4,18 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="rDNju1gLw08zW3RvK1hcB09G49S3j8Kkqw0odrEp0sU" />
-    <title>Yodo Protect - Sécurité, Communauté & Innovation</title>
+    <title>Yodo Protect - Bot Discord & Sécurité de pointe</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK pour l'authentification -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyEXEMPLE_VOTRE_API_KEY",
+            authDomain: "yodoprotect.firebaseapp.com",
+            projectId: "yodoprotect",
+            storageBucket: "yodoprotect.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456:web:abcde"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        window.yodoAuth = {
+            openModal: () => document.getElementById('auth-modal').style.display = 'flex',
+            closeModal: () => document.getElementById('auth-modal').style.display = 'none',
+            
+            emailAuth: async (isSignUp) => {
+                const email = document.getElementById('auth-email').value;
+                const pass = document.getElementById('auth-password').value;
+                const errBox = document.getElementById('auth-error');
+                errBox.textContent = "";
+                try {
+                    if (isSignUp) {
+                        await createUserWithEmailAndPassword(auth, email, pass);
+                    } else {
+                        await signInWithEmailAndPassword(auth, email, pass);
+                    }
+                    window.yodoAuth.closeModal();
+                } catch (error) {
+                    errBox.textContent = "Erreur : " + error.message;
+                }
+            },
+
+            googleAuth: async () => {
+                try {
+                    await signInWithPopup(auth, googleProvider);
+                    window.yodoAuth.closeModal();
+                } catch (error) {
+                    console.error(error);
+                }
+            },
+
+            logout: () => signOut(auth)
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            const userBtn = document.getElementById('user-profile-btn');
+            const userText = document.getElementById('user-btn-text');
+            if (user) {
+                userText.textContent = user.displayName || user.email.split('@')[0];
+                userBtn.onclick = () => {
+                    if(confirm("Veux-tu te déconnecter ?")) window.yodoAuth.logout();
+                };
+            } else {
+                userText.textContent = "Se connecter";
+                userBtn.onclick = window.yodoAuth.openModal;
+            }
+        });
+    </script>
+
     <style>
         :root {
-            --bg-color: #070707;
-            --bg-secondary: #0f0f0f;
-            --card-bg: #141414;
-            --card-hover: #1c1c1c;
+            --bg-color: #0c0c0e;
+            --bg-secondary: #141418;
+            --card-bg: #18181c;
+            --card-hover: #222228;
             --accent-orange: #ff6600;
             --accent-orange-glow: rgba(255, 102, 0, 0.25);
             --text-main: #ffffff;
-            --text-muted: #999999;
+            --text-muted: #9999aa;
             --border-color: rgba(255, 255, 255, 0.08);
         }
 
@@ -31,9 +98,6 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 102, 0, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(255, 102, 0, 0.04) 0%, transparent 40%);
         }
 
         /* --- HEADER & NAVIGATION --- */
@@ -42,7 +106,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(7, 7, 7, 0.85);
+            background: rgba(12, 12, 14, 0.85);
             backdrop-filter: blur(12px);
             display: flex;
             justify-content: space-between;
@@ -104,8 +168,8 @@
         .btn-discord-nav {
             background-color: #5865F2;
             color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 8px 18px;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
             font-size: 0.9rem;
@@ -117,48 +181,33 @@
             transform: translateY(-2px);
         }
 
-        /* --- SECTIONS GLOBALES --- */
-        section {
-            padding: 140px 20px 100px 20px;
-            max-width: 1100px;
-            margin: 0 auto;
-            min-height: 100vh;
+        .btn-account {
+            background-color: var(--card-bg);
+            color: white;
+            border: 1px solid var(--border-color);
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .btn-account:hover {
+            border-color: var(--accent-orange);
+            background-color: var(--card-hover);
+        }
+
+        /* --- HERO STYLE DRAFTBOT --- */
+        .hero-section {
+            padding: 180px 20px 100px 20px;
+            min-height: 90vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        h1, h2 {
-            font-size: 3rem;
-            margin-bottom: 24px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            line-height: 1.1;
-        }
-
-        h1 span, h2 span {
-            color: var(--accent-orange);
-        }
-
-        p {
-            color: var(--text-muted);
-            font-size: 1.15rem;
-            line-height: 1.7;
-            margin-bottom: 25px;
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            text-align: center;
             align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 102, 0, 0.12) 0%, transparent 60%);
         }
 
         .hero-badge {
@@ -167,49 +216,68 @@
             gap: 8px;
             background: rgba(255, 102, 0, 0.1);
             border: 1px solid rgba(255, 102, 0, 0.3);
-            padding: 6px 16px;
-            border-radius: 20px;
+            padding: 6px 18px;
+            border-radius: 30px;
             font-size: 0.85rem;
             font-weight: 600;
             color: var(--accent-orange);
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 3.8rem;
             margin-bottom: 20px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+        }
+
+        h1 span {
+            color: var(--accent-orange);
+        }
+
+        .hero-section p {
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin-bottom: 35px;
+            line-height: 1.6;
         }
 
         .hero-btns {
             display: flex;
             gap: 15px;
             justify-content: center;
-            margin-top: 15px;
             flex-wrap: wrap;
         }
 
         .btn-primary {
             background-color: var(--accent-orange);
             color: white;
-            padding: 14px 28px;
-            border-radius: 8px;
+            padding: 15px 32px;
+            border-radius: 10px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 1rem;
-            box-shadow: 0 4px 20px var(--accent-orange-glow);
+            font-size: 1.05rem;
+            box-shadow: 0 4px 25px var(--accent-orange-glow);
             transition: all 0.3s ease;
         }
 
         .btn-primary:hover {
             transform: translateY(-3px);
             background-color: #e65c00;
-            box-shadow: 0 6px 25px rgba(255, 102, 0, 0.4);
+            box-shadow: 0 6px 30px rgba(255, 102, 0, 0.4);
         }
 
         .btn-secondary {
             background-color: var(--card-bg);
             color: white;
             border: 1px solid var(--border-color);
-            padding: 14px 28px;
-            border-radius: 8px;
+            padding: 15px 32px;
+            border-radius: 10px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 1.05rem;
             transition: all 0.3s ease;
         }
 
@@ -219,126 +287,103 @@
             transform: translateY(-3px);
         }
 
-        /* Boutons Réseaux Sociaux spécifiques */
-        .btn-social {
-            background-color: var(--card-bg);
-            color: white;
-            border: 1px solid var(--border-color);
-            padding: 14px 24px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            display: inline-flex;
+        /* --- SECTIONS EN ALTERNANCE (STYLE DRAFTBOT) --- */
+        .feature-block {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 100px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
             align-items: center;
-            gap: 10px;
-            transition: all 0.3s ease;
         }
 
-        .btn-social:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent-orange);
-            background-color: var(--card-hover);
+        .feature-block.reverse {
+            direction: rtl;
         }
 
-        .social-grid {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 20px;
+        .feature-block.reverse > * {
+            direction: ltr;
         }
 
-        /* --- RÈGLEMENT --- */
-        .rules-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 20px;
-            width: 100%;
-        }
-
-        .rule-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 22px 25px;
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
-        }
-
-        .rule-number {
-            background: rgba(255, 102, 0, 0.15);
-            color: var(--accent-orange);
+        .feature-text h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
             font-weight: 800;
-            font-size: 1.2rem;
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 102, 0, 0.3);
+            letter-spacing: -1px;
+            line-height: 1.15;
         }
 
-        .rule-text h4 {
-            font-size: 1.2rem;
-            margin-bottom: 6px;
-            color: white;
+        .feature-text h2 span {
+            color: var(--accent-orange);
         }
 
-        .rule-text p {
-            margin: 0;
-            font-size: 1rem;
+        .feature-text p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 25px;
         }
 
-        /* --- DOCUMENTATION ACCORDION --- */
-        .doc-box {
+        /* Boîte visuelle style DraftBot (Cercles & Badges) */
+        .feature-visual {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            margin-bottom: 15px;
-            overflow: hidden;
-            transition: border-color 0.3s;
-            width: 100%;
-        }
-
-        .doc-box:hover {
-            border-color: var(--accent-orange);
-        }
-
-        .doc-header {
-            padding: 22px 25px;
-            cursor: pointer;
+            border-radius: 24px;
+            height: 340px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-weight: 600;
-            font-size: 1.2rem;
-            color: white;
-        }
-
-        .doc-content {
-            max-height: 0;
+            justify-content: center;
+            position: relative;
             overflow: hidden;
-            transition: max-height 0.4s ease-out;
-            padding: 0 25px;
-            background: rgba(0,0,0,0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
-        .doc-content p {
-            padding: 20px 0;
-            margin: 0;
+        .circle-art {
+            width: 180px;
+            height: 180px;
+            border: 3px dashed var(--accent-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: rotateSlow 20s linear infinite;
+        }
+
+        @keyframes rotateSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .floating-badge {
+            position: absolute;
+            background: #111;
+            border: 1px solid var(--accent-orange);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--accent-orange);
+            box-shadow: 0 4px 15px rgba(255,102,0,0.2);
         }
 
         /* --- FORMULAIRE AGENT --- */
+        .form-section {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 100px 20px;
+        }
+
         form {
             background: var(--card-bg);
-            padding: 40px;
-            border-radius: 16px;
+            padding: 45px;
+            border-radius: 20px;
             border: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
             gap: 22px;
-            margin-top: 25px;
-            width: 100%;
+            margin-top: 30px;
         }
 
         .form-group {
@@ -355,9 +400,9 @@
         }
 
         input, textarea {
-            background: #0d0d0d;
-            border: 1px solid #262626;
-            border-radius: 8px;
+            background: #0d0d10;
+            border: 1px solid #26262c;
+            border-radius: 10px;
             padding: 14px;
             color: white;
             font-size: 1rem;
@@ -374,10 +419,52 @@
             height: 130px;
         }
 
+        /* --- MODALE DE CONNEXION --- */
+        #auth-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+        }
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 35px;
+            border-radius: 18px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 1.6rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+        .close-modal:hover { color: white; }
+
+        /* --- FOOTER --- */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 50px 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            background: var(--bg-secondary);
+        }
+
         @media(max-width: 768px) {
             header { padding: 15px 20px; }
             nav { display: none; }
-            h1, h2 { font-size: 2.2rem; }
+            h1 { font-size: 2.5rem; }
+            .feature-block { grid-template-columns: 1fr; gap: 30px; }
+            .feature-block.reverse { direction: ltr; }
         }
     </style>
 </head>
@@ -391,169 +478,89 @@
         </div>
         <nav>
             <a href="#accueil" class="active">Accueil</a>
+            <a href="#features">Fonctionnalités</a>
             <a href="#reglement">Règlement</a>
-            <a href="#doc">Documentation</a>
             <a href="#agent">Devenir Agent</a>
             <a href="#contact">Contact</a>
             <div class="nav-buttons">
-                <a href="https://discord.gg/upbS8cvNSB" target="_blank" class="btn-discord-nav">Rejoindre Discord</a>
+                <button id="user-profile-btn" class="btn-account"><span id="user-btn-text">Se connecter</span></button>
+                <a href="https://discord.gg/upbS8cvNSB" target="_blank" class="btn-discord-nav">Discord</a>
             </div>
         </nav>
     </header>
 
-    <!-- SECTION ACCUEIL -->
-    <section id="accueil" class="hero visible">
-        <div class="hero-badge">🛡️ Écosystème de Sécurité & Communauté</div>
-        <h1>Protégez votre espace avec <span>Yodo Protect</span></h1>
-        <p>Bienvenue sur la plateforme officielle. Nous construisons une communauté soudée, sécurisée et impénétrable grâce à notre bot IA de pointe, notre anti-raid renforcé et une charte de tolérance zéro contre la toxicité.</p>
+    <!-- MODALE DE CONNEXION -->
+    <div id="auth-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="window.yodoAuth.closeModal()">&times;</span>
+            <h2 style="font-size: 1.8rem; margin-bottom: 15px;">Espace <span>YodoProtect</span></h2>
+            <p style="font-size: 0.95rem; margin-bottom: 20px; color: var(--text-muted);">Connecte-toi ou crée ton compte en un clic.</p>
+            
+            <button onclick="window.yodoAuth.googleAuth()" class="btn-secondary" style="width: 100%; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer;">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#ffffff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#ffffff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#ffffff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#ffffff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+                Se connecter avec Google
+            </button>
+
+            <div style="border-top: 1px solid var(--border-color); margin: 15px 0; position: relative;"><span style="position: relative; top: -10px; background: var(--card-bg); padding: 0 10px; font-size: 0.8rem; color: var(--text-muted);">OU AVEC UN EMAIL</span></div>
+
+            <div class="form-group" style="margin-bottom: 12px;">
+                <input type="email" id="auth-email" placeholder="Ton e-mail">
+            </div>
+            <div class="form-group" style="margin-bottom: 15px;">
+                <input type="password" id="auth-password" placeholder="Ton mot de passe">
+            </div>
+            <div id="auth-error" style="color: #ff4444; font-size: 0.85rem; margin-bottom: 10px;"></div>
+
+            <div style="display: flex; gap: 10px;">
+                <button onclick="window.yodoAuth.emailAuth(false)" class="btn-primary" style="flex: 1; padding: 12px; font-size: 0.9rem; border:none; cursor:pointer;">Connexion</button>
+                <button onclick="window.yodoAuth.emailAuth(true)" class="btn-secondary" style="flex: 1; padding: 12px; font-size: 0.9rem; cursor:pointer;">S'inscrire</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section id="accueil" class="hero-section">
+        <div class="hero-badge">🛡️ Bot Discord & Sécurité de pointe</div>
+        <h1>Sécurisez votre serveur avec <span>Yodo Protect</span></h1>
+        <p>Propulsez votre communauté vers de nouveaux sommets grâce à notre bot multifonction intelligent, son anti-raid ultra-rapide et ses outils de modération automatisés.</p>
         
         <div class="hero-btns">
-            <a href="https://discord.gg/upbS8cvNSB" target="_blank" class="btn-primary">🚀 Rejoindre le Discord</a>
-            <a href="#reglement" class="btn-secondary">Lire le Règlement</a>
-        </div>
-
-        <!-- Section des Réseaux Sociaux -->
-        <div class="social-grid" style="margin-top: 30px;">
-            <a href="https://www.tiktok.com/@team.cde.off" target="_blank" class="btn-social">🎵 TikTok</a>
-            <a href="https://www.youtube.com/@cde_off" target="_blank" class="btn-social">📺 YouTube</a>
-            <a href="https://www.snapchat.com/add/pipikiwi34500cd?share_id=B_7umkSXReo&locale=fr-FR" target="_blank" class="btn-social">👻 Snapchat</a>
+            <a href="https://discord.gg/upbS8cvNSB" target="_blank" class="btn-primary">🚀 Ajouter au Discord</a>
+            <a href="#features" class="btn-secondary">Découvrir les fonctionnalités</a>
         </div>
     </section>
+
+    <!-- SECTIONS STYLE DRAFTBOT (FEATURES) -->
+    <div id="features">
+        <!-- Feature 1 -->
+        <section class="feature-block">
+            <div class="feature-text">
+                <h2>MODÉRATION <span>AVANCÉE</span></h2>
+                <p>Protégez vos membres contre les comportements toxiques. Avertissements, mutes, kicks ou bans automatiques : tous ces outils s'associent pour faire de votre serveur un havre de paix.</p>
+                <a href="https://discord.gg/upbS8cvNSB" target="_blank" class="btn-primary" style="display: inline-block;">En savoir plus</a>
+            </div>
+            <div class="feature-visual">
+                <div class="circle-art"></div>
+                <div class="floating-badge" style="top: 20px; left: 20px;">🛡️ Anti-Raid</div>
+                <div class="floating-badge" style="bottom: 20px; right: 20px;">⚡ Auto-Mod</div>
+            </div>
+        </section>
+
+        <!-- Feature 2 (Reverse) -->
+        <section class="feature-block reverse">
+            <div class="feature-text">
+                <h2>ACTION & <span>RÉACTION</span></h2>
+                <p>Un clic, un émoji et Yodo Protect réagit instantanément. Utilisez toutes les commandes personnalisées en un minimum de détails. C'est simple, intuitif et ultra réactif !</p>
+                <a href="https://discord.gg/upbS8cvNSB" target="_blank" class="btn-secondary" style="display: inline-block;">Tester les commandes</a>
+            </div>
+            <div class="feature-visual">
+                <div class="circle-art" style="border-color: #5865F2;"></div>
+                <div class="floating-badge" style="top: 30px; right: 30px;">🚀 Commandes /say</div>
+                <div class="floating-badge" style="bottom: 30px; left: 30px;">💬 Tickets</div>
+            </div>
+        </section>
+    </div>
 
     <!-- SECTION RÈGLEMENT -->
-    <section id="reglement">
-        <h2>Le Règlement de la <span>Communauté</span></h2>
-        <p>Pour garantir un espace sain, sécurisé et agréable pour tout le monde, chaque membre s'engage à respecter scrupuleusement les règles suivantes :</p>
-        
-        <div class="rules-container">
-            <div class="rule-item">
-                <div class="rule-number">01</div>
-                <div class="rule-text">
-                    <h4>Tolérance Zéro contre le Harcèlement</h4>
-                    <p>Aucun propos haineux, sexiste, raciste, homophobe ou de cyberharcèlement ne sera toléré. Tout manquement entraînera un bannissement définitif immédiat.</p>
-                </div>
-            </div>
-
-            <div class="rule-item">
-                <div class="rule-number">02</div>
-                <div class="rule-text">
-                    <h4>Interdiction absolue du Doxing</h4>
-                    <p>Partager des informations personnelles, des adresses, des numéros ou des données privées d'un membre (doxing) est strictement interdit et puni par la loi et les règles du serveur.</p>
-                </div>
-            </div>
-
-            <div class="rule-item">
-                <div class="rule-number">03</div>
-                <div class="rule-text">
-                    <h4>Courtoisie et Respect dans les Salons</h4>
-                    <p>Restez polis et respectueux lors de vos échanges écrits ou vocaux. Les provocations inutiles, le spam et la pollution des salons de discussion sont sanctionnés.</p>
-                </div>
-            </div>
-
-            <div class="rule-item">
-                <div class="rule-number">04</div>
-                <div class="rule-text">
-                    <h4>Sécurité des Liens et Publicités</h4>
-                    <p>La publicité non autorisée (en public ou en messages privés aux membres) est interdite. Les liens suspects ou malveillants sont automatiquement bloqués par notre bot de protection.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION DOCUMENTATION -->
-    <section id="doc">
-        <h2>Documentation du Bot <span>Yodo Protect</span></h2>
-        <p>Découvrez en détail les fonctionnalités et les commandes de notre intelligence artificielle de modération et de gestion communautaire.</p>
-        
-        <div class="doc-box">
-            <div class="doc-header" onclick="toggleDoc(this)">
-                <span>🤖 1. Commandes et Utilisation Furtive (ex: /say)</span>
-                <span>▼</span>
-            </div>
-            <div class="doc-content">
-                <p>Yodo Protect intègre des outils d'administration ultra-rapides, incluant la commande <code>/say</code> furtive qui permet de s'exprimer instantanément via le bot sans laisser de traces visibles de commande.</p>
-            </div>
-        </div>
-
-        <div class="doc-box">
-            <div class="doc-header" onclick="toggleDoc(this)">
-                <span>🛡️ 2. Système Anti-Raid & Anti-Nuke Blindé</span>
-                <span>▼</span>
-            </div>
-            <div class="doc-content">
-                <p>Notre système analyse en temps réel la vitesse de connexion des utilisateurs et bloque instantanément toute tentative anormale ou suspecte de raid sur le serveur Discord.</p>
-            </div>
-        </div>
-
-        <div class="doc-box">
-            <div class="doc-header" onclick="toggleDoc(this)">
-                <span>📊 3. Niveaux, Rôles et Salons de Bienvenue</span>
-                <span>▼</span>
-            </div>
-            <div class="doc-content">
-                <p>Stimulez l'engagement grâce à un suivi d'XP automatisé, un système de bannières personnalisables pour l'arrivée des nouveaux membres et des messages privés d'accueil automatiques.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION DEVENIR AGENT -->
-    <section id="agent">
-        <h2>Devenir <span>Agent</span> de Sécurité</h2>
-        <p>Tu souhaites t'engager activement pour la protection des communautés en ligne ? Rejoins l'équipe des agents Yodo Protect. En tant qu'agent, tu veilleras au respect des règles, tu aideras les utilisateurs en difficulté via le système de tickets et tu participeras à l'amélioration continue de nos outils de modération.</p>
-        
-        <!-- Formulaire pointant vers lebgsisou@gmail.com -->
-        <form action="mailto:lebgsisou@gmail.com" method="POST" enctype="text/plain">
-            <div class="form-group">
-                <label for="nom">Ton Nom :</label>
-                <input type="text" id="nom" name="Nom" required placeholder="Ex: Dupont">
-            </div>
-            <div class="form-group">
-                <label for="prenom">Ton Prénom :</label>
-                <input type="text" id="prenom" name="Prenom" required placeholder="Ex: Alexandre">
-            </div>
-            <div class="form-group">
-                <label for="discord">Ton Pseudo Discord :</label>
-                <input type="text" id="discord" name="Discord" required placeholder="Ex: sissou_93">
-            </div>
-            <div class="form-group">
-                <label for="motivation">Pourquoi veux-tu devenir agent ? (Explique tes motivations)</label>
-                <textarea id="motivation" name="Motivation" required placeholder="Décris tes expériences, ton sérieux et pourquoi tu veux rejoindre l'équipe..."></textarea>
-            </div>
-            <button type="submit" class="btn-primary" style="border:none; cursor:pointer; width: 100%;">Envoyer ma candidature à l'équipe</button>
-        </form>
-    </section>
-
-    <!-- SECTION CONTACT -->
-    <section id="contact" style="min-height: 50vh;">
-        <h2>Nous <span>Contacter</span></h2>
-        <p>Pour toute question, partenariat, ou assistance technique concernant le bot ou la communauté, l'équipe officielle est joignable à l'adresse e-mail suivante : <br><br>
-        <strong style="color: var(--accent-orange); font-size: 1.3rem;">lebgsisou@gmail.com</strong></p>
-        <div style="margin-top: 20px;">
-            <a href="https://discord.gg/upbS8cvNSB" target="_blank" class="btn-primary">Rejoindre le Support sur Discord</a>
-        </div>
-    </section>
-
-    <!-- Script JavaScript pour les animations et accordéons -->
-    <script>
-        const sections = document.querySelectorAll('section');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        sections.forEach(section => observer.observe(section));
-
-        function toggleDoc(header) {
-            const content = header.nextElementSibling;
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-            }
-        }
-    </script>
-</body>
-</html>
+    <section id="reglement" style="max-width: 900px; margin: 0 auto; padding: 100px 20px;">
+        <h2 st
