@@ -3,196 +3,543 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yodo Protect | Protection & Anti-Dox</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>YodoProtect - Lutte contre le harcèlement et le doxxing</title>
     <style>
         :root {
-            --primary: #5865F2;
-            --accent: #ed4245;
-            --bg-dark: #0f1113;
-            --card-bg: #1a1d21;
-            --text-main: #ffffff;
-            --text-muted: #a3a6aa;
-            --success: #43b581;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
         }
 
-        * { box-sizing: border-box; transition: all 0.3s ease; }
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
+        * {
             margin: 0;
-            overflow-x: hidden;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            scroll-behavior: smooth;
         }
 
-        /* Navigation */
-        nav {
-            background: rgba(26, 29, 33, 0.95);
-            padding: 15px 5%;
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.6;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER & NAVIGATION --- */
+        header {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
         }
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; }
-        .nav-links { display: flex; gap: 20px; }
-        .nav-links a { color: var(--text-muted); text-decoration: none; font-weight: 500; cursor: pointer; }
-        .nav-links a:hover, .nav-links a.active { color: var(--primary); }
 
-        /* Hero Section */
-        .hero {
-            padding: 100px 5%;
-            text-align: center;
-            background: radial-gradient(circle at center, #2c2f33 0%, #0f1113 100%);
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
         }
-        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; }
-        .hero p { color: var(--text-muted); font-size: 1.2rem; max-width: 700px; margin: 0 auto 30px; }
 
-        /* Sections */
-        .content-section { display: none; padding: 60px 5%; max-width: 1200px; margin: 0 auto; min-height: 70vh; }
-        .content-section.active { display: block; animation: fadeIn 0.5s ease; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .card { background: var(--card-bg); padding: 40px; border-radius: 20px; border: 1px solid #2d3136; margin-bottom: 30px; }
-        
-        /* Formulaires */
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; color: var(--text-muted); }
-        input, textarea, select {
-            width: 100%; padding: 12px; background: #2f3136; border: 1px solid #444; 
-            border-radius: 8px; color: white; font-size: 1rem;
+        .logo span {
+            color: var(--accent);
         }
-        input:focus { border-color: var(--primary); outline: none; }
 
-        .btn {
-            padding: 15px 30px; border-radius: 8px; border: none; font-weight: bold;
-            cursor: pointer; display: inline-flex; align-items: center; gap: 10px; font-size: 1rem;
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-accent { background: var(--accent); color: white; }
-        .btn:hover { opacity: 0.9; transform: scale(1.02); }
 
-        /* Documentation */
-        .doc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .doc-item h3 { color: var(--primary); }
-
-        /* Footer */
-        footer {
-            background: #090a0b; padding: 50px 5%; border-top: 1px solid #222; text-align: center;
+        nav a {
             color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: color 0.2s;
         }
-        .footer-links { margin-bottom: 20px; }
-        .footer-links a { color: var(--text-muted); margin: 0 15px; text-decoration: none; }
+
+        nav a:hover, nav a.active {
+            color: var(--accent);
+        }
+
+        .btn-discord {
+            background-color: #5865F2;
+            color: white !important;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-discord:hover {
+            background-color: #4752c4;
+            transform: translateY(-1px);
+        }
+
+        /* --- MAIN CONTENT & VIEWS --- */
+        main {
+            flex: 1;
+        }
+
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        .hero {
+            padding: 100px 5% 60px 5%;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -0.025em;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: var(--bg-primary);
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* --- SECTIONS & CARDS --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            font-size: 1.25rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- FORMS --- */
+        .form-container {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--accent);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 40px 5% 20px 5%;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-col h4 {
+            margin-bottom: 15px;
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-col ul li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* --- RESPONSIVE MENU --- */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--bg-secondary);
+                padding: 20px;
+                border-bottom: 1px solid var(--border);
+            }
+            nav.active {
+                display: flex;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+        }
     </style>
 </head>
 <body>
 
-<nav>
-    <div class="logo">Yodo Protect</div>
-    <div class="nav-links">
-        <a onclick="showSection('home')" id="link-home" class="active">Accueil</a>
-        <a onclick="showSection('docs')" id="link-docs">Documentation</a>
-        <a onclick="showSection('recrutement')" id="link-recrutement">Devenir Agent</a>
-    </div>
-</nav>
+    <!-- HEADER -->
+    <header>
+        <a onclick="switchPage('home')" class="logo">🛡️ Yodo<span>Protect</span></a>
+        <button class="menu-toggle">☰</button>
+        <nav>
+            <a onclick="switchPage('home')" data-target="home" class="active">Accueil</a>
+            <a onclick="switchPage('doc')" data-target="doc">Documentation</a>
+            <a onclick="switchPage('agent')" data-target="agent">Devenir agent</a>
+            <a onclick="switchPage('contact')" data-target="contact">Contact</a>
+            <a href="https://discord.gg/upbS8cvNSB" target="_blank" class="btn-discord">Rejoindre notre Discord</a>
+        </nav>
+    </header>
 
-<!-- SECTION ACCUEIL -->
-<section id="home" class="content-section active">
-    <div class="hero">
-        <h1>Protégez votre identité numérique</h1>
-        <p>Yodo Protect lutte contre le harcèlement, les raids et le doxing. Nous sécurisons vos communautés pour un web plus humain.</p>
-        <div style="display: flex; justify-content: center; gap: 15px;">
-            <a href="https://discord.gg/upbS8cvNSB" class="btn btn-primary"><i class="fab fa-discord"></i> Rejoindre le Discord</a>
-            <button onclick="showSection('recrutement')" class="btn btn-accent">Nous Rejoindre</button>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2><i class="fas fa-robot"></i> Assistant Anti-Harcèlement</h2>
-        <p>Besoin d'aide immédiate ? Notre assistant est là pour vous guider avant l'intervention humaine.</p>
-        <button class="btn btn-accent" onclick="startAI()">Lancer l'assistant d'urgence</button>
-        <div id="ai-response" style="display:none; margin-top: 20px; padding: 20px; background: #2c2f33; border-radius: 10px;">
-            <p><strong>Assistant :</strong> Je viens de notifier le Staff Yodo. Restez calme. Si vous êtes victime de menaces de Dox, ne supprimez pas les preuves (screens). Un agent va vous contacter via Discord.</p>
-        </div>
-    </div>
-</section>
-
-<!-- SECTION DOCUMENTATION -->
-<section id="docs" class="content-section">
-    <h2>Documentation & Transparence</h2>
-    <div class="doc-grid">
-        <div class="card doc-item">
-            <h3><i class="fas fa-user-shield"></i> Données Personnelles</h3>
-            <p>Nous ne collectons <strong>aucune donnée personnelle</strong> sensible. Votre nom, adresse IP ou messages privés ne sont jamais stockés sur nos serveurs.</p>
-        </div>
-        <div class="card doc-item">
-            <h3><i class="fas fa-gavel"></i> Lutte Anti-Dox</h3>
-            <p>Le doxing est un crime. Notre équipe aide à identifier les sources de fuites et vous accompagne dans les démarches de signalement auprès des plateformes.</p>
-        </div>
-        <div class="card doc-item">
-            <h3><i class="fas fa-users"></i> Le Staff</h3>
-            <p>Nos agents sont formés à la médiation et à la cybersécurité. Ils interviennent bénévolement pour assainir les serveurs Discord partenaires.</p>
-        </div>
-    </div>
-</section>
-
-<!-- SECTION RECRUTEMENT -->
-<section id="recrutement" class="content-section">
-    <div class="card">
-        <h2>Devenir Agent Yodo Protect</h2>
-        <p>Vous souhaitez aider la communauté et lutter contre la toxicité ? Remplissez ce formulaire. Votre candidature sera envoyée directement à notre équipe de gestion.</p>
-        
-        <!-- Formulaire configuré pour envoi par email via Formspree (gratuit) -->
-        <form action="https://formspree.io/f/support@yodoprotect.fr" method="POST">
-            <div class="form-group">
-                <label>Prénom / Pseudo</label>
-                <input type="text" name="prenom" placeholder="Ex: Jean" required>
+    <!-- MAIN VIEWS -->
+    <main>
+        <!-- PAGE ACCUEIL -->
+        <section id="page-home" class="view-section active">
+            <div class="hero">
+                <h1>Ensemble contre le <span>harcèlement</span> et le doxxing</h1>
+                <p>YodoProtect est une plateforme engagée et sécurisée qui accompagne, protège et soutient les victimes de comportements malveillants en ligne.</p>
+                <button onclick="switchPage('contact')" class="btn-primary">Obtenir de l'aide</button>
             </div>
-            <div class="form-group">
-                <label>Nom d'utilisateur Discord (ex: yodo_protect#0000)</label>
-                <input type="text" name="discord_id" placeholder="Pour vous contacter" required>
+
+            <div class="container">
+                <h2 class="section-title">Nos Valeurs et Missions</h2>
+                <p class="section-subtitle">Nous œuvrons chaque jour pour faire d'internet un espace plus sûr et bienveillant.</p>
+                
+                <div class="grid-3">
+                    <div class="card">
+                        <h3>🤝 Écoute et Bienveillance</h3>
+                        <p>Un espace d'échange sécurisé et sans jugement pour libérer la parole des personnes touchées par des attaques en ligne.</p>
+                    </div>
+                    <div class="card">
+                        <h3>🔒 Sécurité et Confidentialité</h3>
+                        <p>Protection stricte des données personnelles et accompagnement technique face au doxxing et aux usurpations d'identité.</p>
+                    </div>
+                    <div class="card">
+                        <h3>⚡ Réactivité et Action</h3>
+                        <p>Une communauté d'agents formés pour signaler, modérer et apporter des solutions concrètes face aux situations d'urgence.</p>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Vos Motivations</label>
-                <textarea name="motivations" rows="5" placeholder="Pourquoi voulez-vous nous rejoindre ?" required></textarea>
+        </section>
+
+        <!-- PAGE DOCUMENTATION -->
+        <section id="page-doc" class="view-section">
+            <div class="container" style="max-width: 800px;">
+                <h1 class="section-title" style="text-align: left;">Guide de Prévention et Documentation</h1>
+                <p class="section-subtitle" style="text-align: left; margin-bottom: 40px;">Comprendre les risques numériques pour mieux s'en protéger et agir efficacement.</p>
+
+                <div class="card" style="margin-bottom: 30px;">
+                    <h3>1. Qu'est-ce que le cyberharcèlement ?</h3>
+                    <p>Le cyberharcèlement se caractérise par des propos ou des comportements répétés visant à dégrader les conditions de vie d'une personne par l'intermédiaire des communications électroniques (réseaux sociaux, jeux vidéo, messageries). Il peut inclure des insultes, des moqueries, des menaces ou l'exclusion ciblée.</p>
+                </div>
+
+                <div class="card" style="margin-bottom: 30px;">
+                    <h3>2. Comprendre le Doxxing</h3>
+                    <p>Le doxxing consiste à rechercher et divulguer publiquement sur internet des informations personnelles concernant un individu (adresse physique, numéro de téléphone, lieu de travail, mots de passe) sans son consentement, dans le but de nuire ou d'intimider.</p>
+                </div>
+
+                <div class="card" style="margin-bottom: 30px;">
+                    <h3>3. Que faire en cas de problème ? (Les bons réflexes)</h3>
+                    <ul style="color: var(--text-muted); padding-left: 20px; display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+                        <li><strong>Ne supprimez rien :</strong> Effectuez immédiatement des captures d'écran (screenshots) datées et visibles de toutes les preuves.</li>
+                        <li><strong>Ne répondez pas aux provocations :</strong> Coupez court aux échanges pour ne pas envenimer la situation.</li>
+                        <li><strong>Bloquez et signalez :</strong> Utilisez les outils de blocage intégrés et signalez les comptes malveillants.</li>
+                        <li><strong>Contactez-nous :</strong> Écrivez-nous à <a href="mailto:support@yodoprotect.fr" style="color: var(--accent);">support@yodoprotect.fr</a> ou rejoignez notre Discord.</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>4. Comment YodoProtect vous aide</h3>
+                    <p>Notre équipe analyse chaque signalement avec sérieux. Nous vous conseillons sur les démarches juridiques, vous aidons à modérer les espaces communautaires touchés et vous offrons un soutien adapté.</p>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">Envoyer ma candidature</button>
-        </form>
-    </div>
-</section>
+        </section>
 
-<footer>
-    <div class="footer-links">
-        <a onclick="showSection('home')">Accueil</a>
-        <a onclick="showSection('docs')">Documentation</a>
-        <a href="mailto:support@yodoprotect.fr">Contact Support</a>
-    </div>
-    <p>&copy; 2024 Yodo Protect. Tous droits réservés. <br>
-    Lutte contre le harcèlement et le cyber-crime.</p>
-</footer>
+        <!-- PAGE DEVENIR AGENT -->
+        <section id="page-agent" class="view-section">
+            <div class="container">
+                <h1 class="section-title">Rejoindre l'équipe des Agents</h1>
+                <p class="section-subtitle">En tant qu'agent YodoProtect, vous participez activement à la protection des utilisateurs et à l'assistance des personnes en détresse.</p>
 
-<script>
-    function showSection(id) {
-        // Cacher toutes les sections
-        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-        // Désactiver les liens
-        document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-        
-        // Afficher la section demandée
-        document.getElementById(id).classList.add('active');
-        document.getElementById('link-' + id).classList.add('active');
-        window.scrollTo(0,0);
-    }
+                <div class="form-container">
+                    <form onsubmit="handleFormSubmit(event)">
+                        <div class="form-group">
+                            <label for="nom">Nom / Prénom ou Pseudo</label>
+                            <input type="text" id="nom" required placeholder="Votre pseudo ou nom">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Adresse E-mail</label>
+                            <input type="email" id="email" required placeholder="votre@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="discord_tag">Identifiant Discord</label>
+                            <input type="text" id="discord_tag" required placeholder="Ex: utilisateur#0000">
+                        </div>
+                        <div class="form-group">
+                            <label for="motivation">Pourquoi souhaitez-vous devenir agent ?</label>
+                            <textarea id="motivation" required placeholder="Décrivez vos motivations, votre expérience en modération..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%;">Envoyer ma candidature</button>
+                    </form>
+                </div>
+            </div>
+        </section>
 
-    function startAI() {
-        document.getElementById('ai-response').style.display = 'block';
-        alert("Alerte envoyée au staff Yodo Protect !");
-    }
-</script>
+        <!-- PAGE CONTACT -->
+        <section id="page-contact" class="view-section">
+            <div class="container">
+                <h1 class="section-title">Besoin d'aide ou d'informations ?</h1>
+                <p class="section-subtitle">Notre équipe est à votre écoute. Contactez-nous par e-mail à <a href="mailto:support@yodoprotect.fr" style="color: var(--accent);">support@yodoprotect.fr</a> ou via le formulaire.</p>
 
+                <div class="form-container">
+                    <form onsubmit="handleFormSubmit(event)">
+                        <div class="form-group">
+                            <label for="c_nom">Votre Nom</label>
+                            <input type="text" id="c_nom" required placeholder="Votre nom">
+                        </div>
+                        <div class="form-group">
+                            <label for="c_email">Votre E-mail</label>
+                            <input type="email" id="c_email" required placeholder="votre@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="c_message">Votre Message</label>
+                            <textarea id="c_message" required placeholder="Exprimez-vous en toute sécurité..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%;">Envoyer le message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>YodoProtect</h4>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Plateforme de protection et de soutien contre les violences numériques.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a onclick="switchPage('home')">Accueil</a></li>
+                    <li><a onclick="switchPage('doc')">Documentation</a></li>
+                    <li><a onclick="switchPage('agent')">Devenir agent</a></li>
+                    <li><a onclick="switchPage('contact')">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact Direct</h4>
+                <ul>
+                    <li><a href="mailto:support@yodoprotect.fr">support@yodoprotect.fr</a></li>
+                    <li><a href="https://discord.gg/upbS8cvNSB" target="_blank">Serveur Discord</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 YodoProtect. Tous droits réservés. • Mentions Légales • Politique de Confidentialité</p>
+        </div>
+    </footer>
+
+    <!-- SCRIPT JAVASCRIPT INTÉGRÉ -->
+    <script>
+        // Gestion du changement de page instantané
+        function switchPage(pageId) {
+            // Cacher toutes les sections
+            document.querySelectorAll('.view-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Afficher la section demandée
+            const targetSection = document.getElementById('page-' + pageId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+
+            // Mettre à jour les liens de navigation actifs
+            document.querySelectorAll('nav a[data-target]').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-target') === pageId) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Fermer le menu mobile si ouvert
+            document.querySelector('nav').classList.remove('active');
+
+            // Remonter en haut de la page
+            window.scrollTo(0, 0);
+        }
+
+        // Gestion du menu hamburger mobile
+        const toggleBtn = document.querySelector('.menu-toggle');
+        const nav = document.querySelector('nav');
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                nav.classList.toggle('active');
+            });
+        }
+
+        // Simulation d'envoi de formulaire propre
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            alert('Votre demande a bien été transmise à l\'équipe de YodoProtect. Nous vous répondrons rapidement sur support@yodoprotect.fr.');
+            e.target.reset();
+        }
+    </script>
 </body>
 </html>
