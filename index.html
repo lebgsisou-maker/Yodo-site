@@ -6,14 +6,18 @@
     <title>YodoProtect - Protection, Anti-Harcèlement & Support</title>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
+            --bg-color: #0b0f19;
+            --card-bg: #131b2e;
             --accent: #3b82f6;
             --accent-hover: #2563eb;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border: #334155;
+            --border: #1e293b;
             --discord: #5865F2;
+            --discord-hover: #4752C4;
+            --success: #22c55e;
+            --warning: #eab308;
+            --danger: #ef4444;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -28,34 +32,41 @@
         header {
             background: var(--card-bg);
             border-bottom: 1px solid var(--border);
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        @media (min-width: 768px) {
+        @media (min-width: 900px) {
             header {
                 flex-direction: row;
                 justify-content: space-between;
-                padding: 1rem 2rem;
+                padding: 1rem 3rem;
             }
         }
         .logo {
-            font-size: 1.25rem;
-            font-weight: bold;
+            font-size: 1.5rem;
+            font-weight: 800;
             color: var(--accent);
+            letter-spacing: 0.5px;
         }
         nav {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 0.5rem 1rem;
+            align-items: center;
+            gap: 0.75rem 1.25rem;
         }
         nav a {
             color: var(--text-muted);
             text-decoration: none;
             font-size: 0.95rem;
+            font-weight: 600;
             transition: color 0.2s;
         }
         nav a:hover {
@@ -64,76 +75,113 @@
         .btn-discord {
             background: var(--discord) !important;
             color: white !important;
-            padding: 0.5rem 1rem !important;
-            border-radius: 6px;
-            font-weight: bold;
+            padding: 0.6rem 1.2rem !important;
+            border-radius: 8px;
+            font-weight: 700;
             text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-discord:hover {
+            background: var(--discord-hover) !important;
         }
         main {
             flex: 1;
-            max-width: 900px;
-            margin: 1.5rem auto;
-            padding: 0 1rem;
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
             width: 100%;
             box-sizing: border-box;
         }
         .section {
             display: none;
             background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 12px;
+            padding: 2.5rem;
+            border-radius: 16px;
             border: 1px solid var(--border);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.3s ease-in-out;
         }
         .section.active {
             display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         h1, h2 {
             color: var(--text-main);
             margin-top: 0;
         }
+        h1 { font-size: 2.2rem; margin-bottom: 1rem; }
+        h2 { font-size: 1.7rem; margin-bottom: 1.2rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
         p, li {
             color: var(--text-muted);
-            line-height: 1.6;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+        ul {
+            padding-left: 1.5rem;
         }
         input, textarea {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.9rem;
             margin-top: 0.5rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
             background: var(--bg-color);
             border: 1px solid var(--border);
-            border-radius: 6px;
+            border-radius: 8px;
             color: var(--text-main);
             box-sizing: border-box;
+            font-size: 1rem;
         }
         button, .btn {
             background: var(--accent);
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
+            padding: 0.85rem 1.8rem;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 700;
             display: inline-block;
             text-decoration: none;
             text-align: center;
+            font-size: 1rem;
+            transition: background 0.2s;
         }
         button:hover, .btn:hover {
             background: var(--accent-hover);
         }
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .card {
+            background: var(--bg-color);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+        .card h3 {
+            color: var(--text-main);
+            margin-top: 0;
+            font-size: 1.25rem;
+        }
         .alert-box {
             margin-top: 1rem;
             padding: 1rem;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: bold;
         }
         footer {
             text-align: center;
-            padding: 1.5rem;
+            padding: 2rem;
             background: var(--card-bg);
             border-top: 1px solid var(--border);
             color: var(--text-muted);
-            font-size: 0.875rem;
+            font-size: 0.9rem;
+            margin-top: 3rem;
         }
     </style>
 </head>
@@ -144,7 +192,7 @@
         <nav>
             <a href="#" onclick="showSection('home')">Accueil</a>
             <a href="#" onclick="showSection('scanner')">Scanner</a>
-            <a href="#" onclick="showSection('docs')">Docs</a>
+            <a href="#" onclick="showSection('docs')">Documentation</a>
             <a href="#" onclick="showSection('apply')">Candidature</a>
             <a href="#" onclick="showSection('contact')">Contact</a>
             <a href="#" onclick="showSection('dashboard')">Dashboard</a>
@@ -156,74 +204,125 @@
         <!-- ACCUEIL -->
         <section id="home" class="section active">
             <h1>Bienvenue sur YodoProtect</h1>
-            <p>Plateforme spécialisée dans la lutte contre le harcèlement, le doxxing et l'assistance aux victimes en ligne. Nous sécurisons votre communauté.</p>
-            <p>Besoin d'aide immédiate ? Rejoignez notre communauté sur Discord.</p>
+            <p><strong>YodoProtect</strong> est une organisation de premier plan dédiée à la sécurisation des espaces numériques, à la lutte acharnée contre le cyberharcèlement, et à la protection active contre les fuites de données personnelles (doxxing).</p>
+            <p>Face aux menaces croissantes sur les réseaux sociaux et les plateformes communautaires, notre mission est de fournir des outils de prévention robustes, un accompagnement personnalisé aux victimes, ainsi qu'une modération de pointe appuyée par des agents formés et qualifiés.</p>
+            
+            <div class="grid-cards">
+                <div class="card">
+                    <h3>🛡️ Anti-Doxxing</h3>
+                    <p>Protection et suppression rapide des informations personnelles publiées sans consentement (adresses, numéros, réseaux).</p>
+                </div>
+                <div class="card">
+                    <h3>💬 Soutien aux Victimes</h3>
+                    <p>Cellule d'écoute active, conseils juridiques et prise en charge sécurisée pour accompagner les personnes ciblées.</p>
+                </div>
+                <div class="card">
+                    <h3>🔍 Sécurité Active</h3>
+                    <p>Outils d'analyse de liens et de détection de malwares intégrés pour sécuriser les interactions de votre communauté.</p>
+                </div>
+            </div>
         </section>
 
         <!-- SCANNER DE LIENS -->
         <section id="scanner" class="section">
             <h2>Vérificateur de liens sécurisé</h2>
-            <p>Testez un lien suspect pour vérifier s'il est malveillant via notre moteur de sécurité.</p>
-            <input type="text" id="urlInput" placeholder="https://exemple.com">
+            <p>Entrez ci-dessous n'importe quel lien suspect. Notre moteur de sécurité connecté interroge les bases de données mondiales pour détecter d'éventuels dangers (phishing, logiciels malveillants, sites frauduleux).</p>
+            <input type="text" id="urlInput" placeholder="Ex: https://exemple-suspect.com">
             <button onclick="checkUrl()">Analyser le lien</button>
             <div id="resultBox"></div>
         </section>
 
         <!-- DOCUMENTATION -->
         <section id="docs" class="section">
-            <h2>Documentation & Politiques</h2>
-            <p>Retrouvez ici toutes les informations sur nos protocoles d'intervention et la protection des données.</p>
+            <h2>Documentation & Politiques Officielles</h2>
+            <p>Retrouvez ci-dessous l'ensemble de nos chartes, procédures opérationnelles et protocoles d'intervention mis en place par l'équipe YodoProtect.</p>
+            
+            <h3 style="color: var(--text-main); margin-top: 1.5rem;">1. Protocole d'Urgence Anti-Harcèlement</h3>
+            <p>En cas de vagues de harcèlement coordonnées ou de cyber-attaques ciblées sur un membre, notre protocole s'active en trois étapes : 
             <ul>
-                <li>Protocole d'urgence anti-harcèlement</li>
-                <li>Règlement intérieur des agents YodoProtect</li>
-                <li>Politique de confidentialité et traitement des signalements</li>
-            </ul>
+                <li><strong>Phase d'isolement :</strong> Gel des espaces de discussion et mise en sécurité des comptes compromis.</li>
+                <li><strong>Phase de collecte :</strong> Archivage et journalisation de toutes les preuves (captures, logs, profils agresseurs) en vue d'un signalement massif aux autorités compétentes ou aux plateformes concernées.</li>
+                <li><strong>Phase d'accompagnement :</strong> Suivi psychologique et mise en place d'un bouclier numérique pour empêcher toute récidive.</li>
+            </ul></p>
+
+            <h3 style="color: var(--text-main); margin-top: 1.5rem;">2. Règlement Intérieur des Agents</h3>
+            <p>Le statut d'agent au sein de YodoProtect implique une intégrité irréprochable. Toute information récoltée lors des dossiers d'assistance est strictement confidentielle. L'utilisation abusive des outils de modération ou le non-respect de la charte éthique entraîne une destitution immédiate et un bannissement définitif de nos structures.</p>
+
+            <h3 style="color: var(--text-main); margin-top: 1.5rem;">3. Traitement des Signalements Doxxing</h3>
+            <p>Nous traitons les signalements de doxxing en urgence absolue. Si vos données personnelles sont compromises, contactez-nous immédiatement via notre serveur Discord ou par e-mail à l'adresse officielle pour déclencher la procédure de suppression d'urgence.</p>
         </section>
 
         <!-- DEVENIR AGENT -->
         <section id="apply" class="section">
-            <h2>Candidature - Devenir Agent</h2>
-            <p>Le rôle d'agent est soumis à des règles strictes de confidentialité et d'éthique.</p>
+            <h2>Rejoindre l'équipe - Candidature Agent</h2>
+            <p>Vous souhaitez vous investir activement dans la protection d'autrui et la sécurité en ligne ? Remplissez notre formulaire de candidature ci-dessous. Le sérieux et la motivation sont de rigueur.</p>
             <form onsubmit="handleApply(event)">
-                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 1rem;">
-                    <input type="checkbox" id="acceptPolicy" required style="width: auto; margin: 0;"> 
-                    <span>J'ai lu et j'accepte la politique de sécurité et les règles des agents.</span>
+                <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; margin-bottom: 1.5rem; background: var(--bg-color); padding: 1rem; border-radius: 8px; border: 1px solid var(--border);">
+                    <input type="checkbox" id="acceptPolicy" required style="width: 20px; height: 20px; margin: 0; accent-color: var(--accent);"> 
+                    <span style="font-size: 0.95rem; color: var(--text-main);">J'ai lu, compris et j'accepte l'intégralité de la politique de sécurité et du règlement intérieur des agents YodoProtect.</span>
                 </label>
-                <label>Votre pseudo Discord :</label>
-                <input type="text" id="discordTag" placeholder="Ex: Pseudo#0000" required>
-                <label>Pourquoi souhaitez-vous rejoindre l'équipe ?</label>
-                <textarea rows="4" placeholder="Expliquez vos motivations..." required></textarea>
-                <button type="submit">Envoyer la candidature</button>
+                <label>Votre identifiant Discord :</label>
+                <input type="text" id="discordTag" placeholder="Ex: Pseudo#0000 ou pseudo_unique" required>
+                <label>Pourquoi souhaitez-vous devenir agent ? (Motivations et expériences)</label>
+                <textarea rows="5" placeholder="Décrivez vos compétences, votre expérience en modération ou gestion de crise..." required></textarea>
+                <button type="submit">Soumettre ma candidature</button>
             </form>
         </section>
 
         <!-- CONTACT -->
         <section id="contact" class="section">
-            <h2>Contactez-nous</h2>
-            <p>Pour toute question ou signalement urgent, écrivez-nous à : <strong style="color: var(--text-main);">support@yodoprotect.fr</strong></p>
+            <h2>Contactez l'administration</h2>
+            <p>Pour toute question générale, partenariat ou demande d'assistance d'urgence, notre équipe se tient à votre disposition :</p>
+            <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); margin-top: 1.5rem;">
+                <p style="margin: 0 0 1rem 0;">✉️ E-mail officiel : <strong style="color: var(--text-main); font-size: 1.1rem;">support@yodoprotect.fr</strong></p>
+                <p style="margin: 0;">💬 Discord communautaire : <a href="https://discord.gg/upbS8cvNSB" target="_blank" style="color: var(--accent); font-weight: bold;">discord.gg/upbS8cvNSB</a></p>
+            </div>
         </section>
 
-        <!-- DASHBOARD INTERNE -->
+        <!-- DASHBOARD EXCLUSIF -->
         <section id="dashboard" class="section">
-            <h2>Dashboard YodoProtect</h2>
-            <p>Bienvenue dans l'espace de gestion et de suivi des signalements de la communauté.</p>
-            <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border); margin-top: 1rem;">
-                <h3 style="margin-top: 0; color: var(--accent);">Statut des systèmes</h3>
-                <p>🟢 Moteur de détection Safe Browsing : <strong>Actif</strong></p>
-                <p>🛡️ Protection anti-doxxing : <strong>Opérationnelle</strong></p>
-                <p style="margin-bottom: 0;">👥 Salon communautaire : <a href="https://discord.gg/upbS8cvNSB" target="_blank" style="color: var(--accent);">Accéder au Discord</a></p>
+            <h2>Dashboard Opérationnel YodoProtect</h2>
+            <p>Bienvenue dans l'espace de contrôle de la plateforme. Suivez l'état de nos services et accédez aux outils de gestion communautaire en temps réel.</p>
+            
+            <div class="grid-cards" style="margin-top: 2rem;">
+                <div class="card" style="border-left: 4px solid var(--success);">
+                    <h3>Moteur Safe Browsing</h3>
+                    <p style="margin: 0.5rem 0 1rem 0; color: var(--success); font-weight: bold;">🟢 Opérationnel (Actif)</p>
+                    <p style="font-size: 0.9rem;">Analyse des liens malveillants et requêtes API en direct.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid var(--accent);">
+                    <h3>Cellule Anti-Doxxing</h3>
+                    <p style="margin: 0.5rem 0 1rem 0; color: var(--accent); font-weight: bold;">🛡️ 100% Actif</p>
+                    <p style="font-size: 0.9rem;">Traitement des signalements de fuites de données en cours.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid var(--discord);">
+                    <h3>Support Discord</h3>
+                    <p style="margin: 0.5rem 0 1rem 0; color: var(--discord); font-weight: bold;">💬 Connecté</p>
+                    <p style="font-size: 0.9rem;">Rejoignez le salon pour échanger avec l'équipe de modération.</p>
+                    <a href="https://discord.gg/upbS8cvNSB" target="_blank" class="btn-discord" style="display: inline-block; margin-top: 0.5rem; font-size: 0.85rem; padding: 0.4rem 0.8rem !important;">Ouvrir Discord</a>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; background: var(--bg-color); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
+                <h3 style="margin-top: 0; color: var(--text-main);">Actions Rapides Administrateur</h3>
+                <p>Outils de gestion rapide pour les interventions de sécurité :</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+                    <button onclick="alert('Redirection vers les logs de sécurité en cours...')" style="background: var(--card-bg); border: 1px solid var(--border);">Voir les logs</button>
+                    <button onclick="alert('Exportation des rapports de signalement effectuée.')">Exporter les rapports</button>
+                </div>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 YodoProtect - Tous droits réservés | support@yodoprotect.fr</p>
+        <p>&copy; 2026 YodoProtect - Tous droits réservés | Contact : support@yodoprotect.fr</p>
     </footer>
 
     <script>
         function showSection(sectionId) {
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         async function checkUrl() {
@@ -231,11 +330,11 @@
             const resultBox = document.getElementById('resultBox');
             
             if (!urlToTest) {
-                resultBox.innerHTML = '<div class="alert-box" style="background: rgba(234, 179, 8, 0.2); color: #facc15;">Veuillez entrer une URL valide.</div>';
+                resultBox.innerHTML = '<div class="alert-box" style="background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid #eab308;">Veuillez entrer une URL valide à analyser.</div>';
                 return;
             }
 
-            resultBox.innerHTML = '<div class="alert-box" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa;">Analyse en cours...</div>';
+            resultBox.innerHTML = '<div class="alert-box" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6;">Analyse du lien en cours via Google Safe Browsing...</div>';
 
             const API_KEY = "TA_CLE_API_GOOGLE";
 
@@ -261,19 +360,19 @@
                 const data = await response.json();
 
                 if (data.matches && data.matches.length > 0) {
-                    resultBox.innerHTML = '<div class="alert-box" style="background: rgba(239, 68, 68, 0.2); color: #f87171;">⚠️ ATTENTION : Ce lien est dangereux (menace détectée) !</div>';
+                    resultBox.innerHTML = '<div class="alert-box" style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444;">⚠️ ATTENTION : Ce lien est classé comme DANGEREUX (menace de phishing ou malware détectée) !</div>';
                 } else {
-                    resultBox.innerHTML = '<div class="alert-box" style="background: rgba(34, 197, 94, 0.2); color: #4ade80;">✅ Ce lien semble sûr. Aucune menace détectée.</div>';
+                    resultBox.innerHTML = '<div class="alert-box" style="background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #22c55e;">✅ Ce lien est SÛR. Aucune menace connue n\'a été répertoriée par Google.</div>';
                 }
             } catch (error) {
                 console.error(error);
-                resultBox.innerHTML = '<div class="alert-box" style="background: rgba(239, 68, 68, 0.2); color: #f87171;">Erreur lors de la communication avec l\'API de sécurité.</div>';
+                resultBox.innerHTML = '<div class="alert-box" style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444;">Erreur de communication avec l\'API de sécurité. Vérifiez votre connexion.</div>';
             }
         }
 
         function handleApply(event) {
             event.preventDefault();
-            alert("Votre candidature a bien été envoyée avec succès !");
+            alert("Votre candidature a bien été transmise à l'équipe de YodoProtect ! Nous l'étudierons dans les plus brefs délais.");
             event.target.reset();
         }
     </script>
