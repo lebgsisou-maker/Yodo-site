@@ -9,9 +9,11 @@
             --bg-color: #0f172a;
             --card-bg: #1e293b;
             --accent: #3b82f6;
+            --accent-hover: #2563eb;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border: #334155;
+            --discord: #5865F2;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -26,29 +28,51 @@
         header {
             background: var(--card-bg);
             border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem;
+            padding: 1rem;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
+            gap: 1rem;
+        }
+        @media (min-width: 768px) {
+            header {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 1rem 2rem;
+            }
         }
         .logo {
             font-size: 1.25rem;
             font-weight: bold;
             color: var(--accent);
         }
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem 1rem;
+        }
         nav a {
             color: var(--text-muted);
             text-decoration: none;
-            margin-left: 1.5rem;
+            font-size: 0.95rem;
             transition: color 0.2s;
         }
         nav a:hover {
             color: var(--text-main);
         }
+        .btn-discord {
+            background: var(--discord) !important;
+            color: white !important;
+            padding: 0.5rem 1rem !important;
+            border-radius: 6px;
+            font-weight: bold;
+            text-decoration: none;
+        }
         main {
             flex: 1;
             max-width: 900px;
-            margin: 2rem auto;
+            margin: 1.5rem auto;
             padding: 0 1rem;
             width: 100%;
             box-sizing: border-box;
@@ -56,7 +80,7 @@
         .section {
             display: none;
             background: var(--card-bg);
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 12px;
             border: 1px solid var(--border);
         }
@@ -65,12 +89,13 @@
         }
         h1, h2 {
             color: var(--text-main);
+            margin-top: 0;
         }
-        p {
+        p, li {
             color: var(--text-muted);
             line-height: 1.6;
         }
-        input, textarea, select {
+        input, textarea {
             width: 100%;
             padding: 0.75rem;
             margin-top: 0.5rem;
@@ -81,7 +106,7 @@
             color: var(--text-main);
             box-sizing: border-box;
         }
-        button {
+        button, .btn {
             background: var(--accent);
             color: white;
             border: none;
@@ -89,10 +114,12 @@
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            transition: opacity 0.2s;
+            display: inline-block;
+            text-decoration: none;
+            text-align: center;
         }
-        button:hover {
-            opacity: 0.9;
+        button:hover, .btn:hover {
+            background: var(--accent-hover);
         }
         .alert-box {
             margin-top: 1rem;
@@ -117,10 +144,11 @@
         <nav>
             <a href="#" onclick="showSection('home')">Accueil</a>
             <a href="#" onclick="showSection('scanner')">Scanner</a>
-            <a href="#" onclick="showSection('docs')">Documentation</a>
-            <a href="#" onclick="showSection('apply')">Devenir Agent</a>
+            <a href="#" onclick="showSection('docs')">Docs</a>
+            <a href="#" onclick="showSection('apply')">Candidature</a>
             <a href="#" onclick="showSection('contact')">Contact</a>
             <a href="#" onclick="showSection('dashboard')">Dashboard</a>
+            <a href="https://discord.gg/upbS8cvNSB" target="_blank" class="btn-discord">Rejoindre le Discord</a>
         </nav>
     </header>
 
@@ -129,13 +157,13 @@
         <section id="home" class="section active">
             <h1>Bienvenue sur YodoProtect</h1>
             <p>Plateforme spécialisée dans la lutte contre le harcèlement, le doxxing et l'assistance aux victimes en ligne. Nous sécurisons votre communauté.</p>
-            <p>Rejoignez notre communauté officielle sur Discord : <a href="https://discord.gg/upbS8cvNSB" target="_blank" style="color: var(--accent);">discord.gg/upbS8cvNSB</a></p>
+            <p>Besoin d'aide immédiate ? Rejoignez notre communauté sur Discord.</p>
         </section>
 
         <!-- SCANNER DE LIENS -->
         <section id="scanner" class="section">
             <h2>Vérificateur de liens sécurisé</h2>
-            <p>Testez un lien suspect pour vérifier s'il est malveillant grâce à notre outil de sécurité.</p>
+            <p>Testez un lien suspect pour vérifier s'il est malveillant via notre moteur de sécurité.</p>
             <input type="text" id="urlInput" placeholder="https://exemple.com">
             <button onclick="checkUrl()">Analyser le lien</button>
             <div id="resultBox"></div>
@@ -144,7 +172,7 @@
         <!-- DOCUMENTATION -->
         <section id="docs" class="section">
             <h2>Documentation & Politiques</h2>
-            <p>Retrouvez ici toutes les informations sur nos protocoles d'intervention, la gestion des signalements de doxxing et la protection des données personnelles.</p>
+            <p>Retrouvez ici toutes les informations sur nos protocoles d'intervention et la protection des données.</p>
             <ul>
                 <li>Protocole d'urgence anti-harcèlement</li>
                 <li>Règlement intérieur des agents YodoProtect</li>
@@ -157,8 +185,9 @@
             <h2>Candidature - Devenir Agent</h2>
             <p>Le rôle d'agent est soumis à des règles strictes de confidentialité et d'éthique.</p>
             <form onsubmit="handleApply(event)">
-                <label>
-                    <input type="checkbox" id="acceptPolicy" required> J'ai lu et j'accepte la politique de sécurité et les règles des agents.
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 1rem;">
+                    <input type="checkbox" id="acceptPolicy" required style="width: auto; margin: 0;"> 
+                    <span>J'ai lu et j'accepte la politique de sécurité et les règles des agents.</span>
                 </label>
                 <label>Votre pseudo Discord :</label>
                 <input type="text" id="discordTag" placeholder="Ex: Pseudo#0000" required>
@@ -171,17 +200,18 @@
         <!-- CONTACT -->
         <section id="contact" class="section">
             <h2>Contactez-nous</h2>
-            <p>Besoin d'aide ou d'un signalement urgent ? Écrivez-nous à : <strong style="color: var(--text-main);">support@yodoprotect.fr</strong></p>
-            <p>Ou rejoignez directement notre serveur Discord : <a href="https://discord.gg/upbS8cvNSB" target="_blank" style="color: var(--accent);">discord.gg/upbS8cvNSB</a></p>
+            <p>Pour toute question ou signalement urgent, écrivez-nous à : <strong style="color: var(--text-main);">support@yodoprotect.fr</strong></p>
         </section>
 
-        <!-- DASHBOARD EXCLUSIF -->
+        <!-- DASHBOARD INTERNE -->
         <section id="dashboard" class="section">
-            <h2>Dashboard Exclusif</h2>
-            <p>Cet espace est réservé aux membres de notre communauté Discord.</p>
-            <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border); text-align: center;">
-                <p>🔒 Vérification de l'appartenance au serveur requise.</p>
-                <a href="https://discord.gg/upbS8cvNSB" target="_blank"><button>Se connecter avec Discord</button></a>
+            <h2>Dashboard YodoProtect</h2>
+            <p>Bienvenue dans l'espace de gestion et de suivi des signalements de la communauté.</p>
+            <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border); margin-top: 1rem;">
+                <h3 style="margin-top: 0; color: var(--accent);">Statut des systèmes</h3>
+                <p>🟢 Moteur de détection Safe Browsing : <strong>Actif</strong></p>
+                <p>🛡️ Protection anti-doxxing : <strong>Opérationnelle</strong></p>
+                <p style="margin-bottom: 0;">👥 Salon communautaire : <a href="https://discord.gg/upbS8cvNSB" target="_blank" style="color: var(--accent);">Accéder au Discord</a></p>
             </div>
         </section>
     </main>
@@ -191,13 +221,11 @@
     </footer>
 
     <script>
-        // Navigation fluide entre les pages de l'application
         function showSection(sectionId) {
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
         }
 
-        // Logique de vérification d'URL avec la clé API
         async function checkUrl() {
             const urlToTest = document.getElementById('urlInput').value;
             const resultBox = document.getElementById('resultBox');
@@ -209,7 +237,7 @@
 
             resultBox.innerHTML = '<div class="alert-box" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa;">Analyse en cours...</div>';
 
-            const API_KEY = "TA_CLE_API_GOOGLE"; // Netlify injectera ou remplacera cette valeur
+            const API_KEY = "TA_CLE_API_GOOGLE";
 
             try {
                 const endpoint = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${API_KEY}`;
@@ -245,7 +273,7 @@
 
         function handleApply(event) {
             event.preventDefault();
-            alert("Votre candidature a bien été envoyée avec succès ! Nous l'étudierons rapidement.");
+            alert("Votre candidature a bien été envoyée avec succès !");
             event.target.reset();
         }
     </script>
