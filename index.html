@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YodoProtect - Plateforme No-Code de Bot Discord</title>
+    <title>YodoProtect - Dashboard Bot Discord & Tickets</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -24,7 +25,7 @@
         }
         header {
             width: 100%;
-            max-width: 900px;
+            max-width: 1000px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -33,7 +34,7 @@
             margin-bottom: 30px;
         }
         .logo {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             color: #58a6ff;
             display: flex;
@@ -42,9 +43,9 @@
         }
         .container {
             width: 100%;
-            max-width: 900px;
+            max-width: 1000px;
             display: grid;
-            grid-template-columns: 1fr 2fr;
+            grid-template-columns: 320px 1fr;
             gap: 30px;
             align-items: start;
         }
@@ -53,33 +54,39 @@
                 grid-template-columns: 1fr;
             }
         }
-        /* Section Mascotte Yodo */
+        /* Panneau Mascotte Cartoon Cat */
         .mascot-card {
             background: #161b22;
             border: 1px solid #30363d;
             border-radius: 12px;
             padding: 20px;
             text-align: center;
-            position: relative;
+            position: sticky;
+            top: 20px;
         }
         .mascot-img {
-            width: 140px;
-            height: 140px;
+            width: 130px;
+            height: 130px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid #58a6ff;
             margin-bottom: 15px;
-            box-shadow: 0 0 20px rgba(88, 166, 255, 0.2);
+            box-shadow: 0 0 25px rgba(88, 166, 255, 0.25);
+            transition: transform 0.3s ease;
+        }
+        .mascot-img:hover {
+            transform: scale(1.05);
         }
         .speech-bubble {
             background: #21262d;
             border: 1px solid #30363d;
             padding: 15px;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
             color: #e6edf3;
             position: relative;
             text-align: left;
+            line-height: 1.5;
         }
         .speech-bubble::after {
             content: '';
@@ -91,27 +98,55 @@
             border-style: solid;
             border-color: transparent transparent #21262d transparent;
         }
-        /* Panneau Principal / Dashboard */
-        .dashboard-card {
+        /* Contenu Principal */
+        .main-card {
             background: #161b22;
             border: 1px solid #30363d;
             border-radius: 12px;
             padding: 30px;
         }
+        .step-section {
+            display: none;
+        }
+        .step-section.active {
+            display: block;
+        }
         h2 {
             font-size: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             color: #f0f6fc;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        p {
+            font-size: 14px;
+            color: #8b949e;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .guide-steps {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .guide-steps li {
+            margin-left: 20px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #c9d1d9;
         }
         .form-group {
             margin-bottom: 20px;
         }
         label {
             display: block;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 13px;
+            font-weight: 600;
             margin-bottom: 8px;
-            color: #8b949e;
+            color: #c9d1d9;
         }
         input[type="text"] {
             width: 100%;
@@ -129,7 +164,7 @@
         }
         .btn {
             background: #238636;
-            color: #white;
+            color: #fff;
             border: none;
             padding: 12px 20px;
             border-radius: 6px;
@@ -137,21 +172,71 @@
             cursor: pointer;
             width: 100%;
             transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
         }
         .btn:hover {
             background: #2ea043;
         }
-        .status-box {
-            margin-top: 20px;
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            display: none;
+        .btn-secondary {
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            margin-top: 10px;
         }
-        .status-success {
-            background: rgba(35, 134, 54, 0.15);
-            border: 1px solid #238636;
-            color: #3fb950;
+        .btn-secondary:hover {
+            background: #30363d;
+        }
+        /* Dashboard Styles */
+        .dash-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .dash-grid { grid-template-columns: 1fr; }
+        }
+        .dash-box {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            padding: 18px;
+            border-radius: 8px;
+        }
+        .dash-box h3 {
+            font-size: 15px;
+            color: #58a6ff;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .dash-box p {
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+        .action-link {
+            display: inline-block;
+            background: #1f6feb;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .action-link:hover {
+            background: #388bfd;
+        }
+        .error-msg {
+            color: #f85149;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
         }
     </style>
 </head>
@@ -159,53 +244,132 @@
 
     <header>
         <div class="logo">
-            🦁 YodoProtect
+            <i class="fa-solid fa-shield-cat"></i> YodoProtect
         </div>
-        <div style="font-size: 14px; color: #8b949e;">v1.0.0 Production</div>
+        <div style="font-size: 13px; color: #8b949e;"><i class="fa-solid fa-circle text-success" style="color: #3fb950; font-size: 10px;"></i> En ligne sur Vercel</div>
     </header>
 
     <div class="container">
-        <!-- Section Mascotte -->
+        <!-- Mascotte Cartoon Cat -->
         <div class="mascot-card">
-            <!-- Nouvelle image mascotte lion moderne et stylée -->
-            <img src="https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?w=500&auto=format&fit=crop&q=60" alt="Yodo Mascot" class="mascot-img">
+            <img src="watermarked_img_11195451337525838026.png" alt="Cartoon Cat Mascot" class="mascot-img" id="mascot-avatar">
             <div class="speech-bubble" id="yodo-dialogue">
-                Salut ! Je suis <strong>Yodo</strong>, ton assistant personnel. Entre ton token de bot Discord pour configurer ta sécurité en un clic !
+                Salut Miaou ! Je suis <strong>Cartoon Cat</strong>, ton guide personnel. Je vais t'aider à configurer ton bot de sécurité et de tickets pas à pas ! Prêt ? Clique sur suivant ! 🐾
             </div>
         </div>
 
-        <!-- Section Configuration / Dashboard -->
-        <div class="dashboard-card">
-            <h2>Création & Configuration du Bot</h2>
-            <div class="form-group">
-                <label for="bot-token">Token du Bot Discord</label>
-                <input type="text" id="bot-token" placeholder="Colle ton token secret ici...">
-            </div>
-            <div class="form-group">
-                <label for="bot-prefix">Nom ou Préfixe</label>
-                <input type="text" id="bot-prefix" placeholder="Ex: MonBotSecurise">
-            </div>
-            <button class="btn" onclick="validateBot()">Lancer le Bot sur Render</button>
+        <!-- Contenu des étapes -->
+        <div class="main-card">
             
-            <div id="status-box" class="status-box">
-                ✅ Token valide ! Transmission au backend Render en cours...
+            <!-- ETAPE 1 : Guide création du bot -->
+            <div id="step-1" class="step-section active">
+                <h2><i class="fa-solid fa-book-open"></i> Étape 1 : Créer ton Bot Discord</h2>
+                <p>Avant toute chose, tu dois créer l'application officielle de ton bot sur Discord. Suis ces instructions simples :</p>
+                <ol class="guide-steps">
+                    <li>Rends-toi sur le <a href="https://discord.com/developers/applications" target="_blank" style="color: #58a6ff;">Discord Developer Portal</a>.</li>
+                    <li>Clique sur <strong>"New Application"</strong> en haut à droite et donne-lui un nom (ex: <em>YodoProtect</em>).</li>
+                    <li>Va dans l'onglet <strong>"Bot"</strong> (dans le menu de gauche) puis clique sur <strong>"Add Bot"</strong>.</li>
+                    <li>Sous le nom du bot, clique sur <strong>"Reset Token"</strong> et copie ton précieux token secret !</li>
+                </ol>
+                <button class="btn" onclick="nextStep(2)">C'est fait, j'ai mon Token ! <i class="fa-solid fa-arrow-right"></i></button>
             </div>
+
+            <!-- ETAPE 2 : Saisie Token & Nom -->
+            <div id="step-2" class="step-section">
+                <h2><i class="fa-solid fa-key"></i> Étape 2 : Configuration du Bot</h2>
+                <p>Entre les informations de ton bot ci-dessous. Je vais vérifier que ton token est valide avant de l'envoyer au backend Render !</p>
+                
+                <div class="form-group">
+                    <label for="bot-name"><i class="fa-solid fa-robot"></i> Nom officiel du Bot</label>
+                    <input type="text" id="bot-name" placeholder="Ex: YodoBot#1234">
+                </div>
+
+                <div class="form-group">
+                    <label for="bot-token"><i class="fa-solid fa-lock"></i> Token Secret du Bot Discord</label>
+                    <input type="text" id="bot-token" placeholder="Colle ton long token secret ici...">
+                    <div id="token-error" class="error-msg"><i class="fa-solid fa-triangle-exclamation"></i> Oups ! Ce token semble trop court ou invalide (il faut un vrai token Discord complet).</div>
+                </div>
+
+                <button class="btn" onclick="validateAndLaunch()"><i class="fa-solid fa-rocket"></i> Lancer & Accéder au Dashboard</button>
+                <button class="btn btn-secondary" onclick="nextStep(1)"><i class="fa-solid fa-arrow-left"></i> Retour au guide</button>
+            </div>
+
+            <!-- ETAPE 3 : Le Dashboard Ultime -->
+            <div id="step-3" class="step-section">
+                <h2><i class="fa-solid fa-gauge-high"></i> Dashboard de Gestion</h2>
+                <p>Félicitations ! Ton bot <span id="display-bot-name" style="color: #58a6ff; font-weight: 600;">MonBot</span> est configuré et connecté au backend Render. Voici tes outils de contrôle :</p>
+
+                <div class="dash-grid">
+                    <div class="dash-box">
+                        <h3><i class="fa-solid fa-ticket"></i> Système de Tickets</h3>
+                        <p>Configure le salon pour recevoir les demandes d'aide et de support des membres.</p>
+                        <a href="#" class="action-link" onclick="alert('Module Tickets activé sur Render !')"><i class="fa-solid fa-gear"></i> Configurer</a>
+                    </div>
+                    <div class="dash-box">
+                        <h3><i class="fa-solid fa-gamepad"></i> Mini-Jeux & Fun</h3>
+                        <p>Active les commandes de jeux et divertissements interactifs sur ton serveur.</p>
+                        <a href="#" class="action-link" onclick="alert('Mini-jeux activés !')"><i class="fa-solid fa-wand-magic-sparkles"></i> Gérer</a>
+                    </div>
+                    <div class="dash-box">
+                        <h3><i class="fa-solid fa-terminal"></i> Commandes Slash (/)</h3>
+                        <p>Commandes prêtes : <code>/ban</code>, <code>/ticket</code>, <code>/help</code>, <code>/ping</code>.</p>
+                        <a href="#" class="action-link" onclick="alert('Commandes synchronisées avec Discord !')"><i class="fa-solid fa-rotate"></i> Synchroniser</a>
+                    </div>
+                    <div class="dash-box">
+                        <h3><i class="fa-solid fa-link"></i> Inviter sur Discord</h3>
+                        <p>Ajoute ton bot directement sur ton serveur avec les permissions administrateur.</p>
+                        <a href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&scope=bot" target="_blank" class="action-link" style="background: #238636;"><i class="fa-solid fa-plus"></i> Inviter le Bot</a>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" onclick="nextStep(2)"><i class="fa-solid fa-pen-to-square"></i> Modifier la configuration</button>
+            </div>
+
         </div>
     </div>
 
     <script>
-        function validateBot() {
-            const tokenInput = document.getElementById('bot-token').value;
-            const statusBox = document.getElementById('status-box');
+        function nextStep(stepNumber) {
+            // Cacher toutes les sections
+            document.querySelectorAll('.step-section').forEach(sec => sec.classList.remove('active'));
+            // Afficher la demandée
+            document.getElementById('step-' + stepNumber).classList.add('active');
+
+            const dialogue = document.getElementById('yodo-dialogue');
+            
+            // Changer les dialogues et têtes de Cartoon Cat selon l'étape
+            if(stepNumber === 1) {
+                dialogue.innerHTML = "Miaou ! Suis bien les étapes pour créer l'application de ton bot sur le portail développeur de Discord. Je t'attends juste après ! 🐾";
+            } else if(stepNumber === 2) {
+                dialogue.innerHTML = "On y est presque ! Entre ton vrai token de bot (il est long et sécurisé) et son nom pour que je puisse l'initialiser ! 😸";
+            }
+        }
+
+        function validateAndLaunch() {
+            const tokenInput = document.getElementById('bot-token').value.trim();
+            const botNameInput = document.getElementById('bot-name').value.trim();
+            const errorMsg = document.getElementById('token-error');
             const dialogue = document.getElementById('yodo-dialogue');
 
-            if(tokenInput.length > 20) {
-                statusBox.style.display = 'block';
-                dialogue.innerHTML = "Incroyable ! Ton token a l'air parfait. Je m'occupe de le lier à ton backend Render ! 🚀";
-            } else {
-                alert("Oups, ce token semble trop court ou invalide !");
-                dialogue.innerHTML = "Attention moussaillon, vérifie bien ton token Discord !";
+            // Vérification stricte d'un token Discord (généralement supérieur à 50 caractères)
+            if(tokenInput.length < 40) {
+                errorMsg.style.display = 'block';
+                dialogue.innerHTML = "Oups miaou ! Ce token est beaucoup trop court. Vérifie de bien copier la clé secrète entière depuis le portail Discord ! 😿";
+                return;
             }
+
+            errorMsg.style.display = 'none';
+            
+            // Si le nom est vide, on met un nom par défaut
+            if(botNameInput) {
+                document.getElementById('display-bot-name').textContent = botNameInput;
+            }
+
+            // Passage à l'étape 3 (Dashboard)
+            document.querySelectorAll('.step-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById('step-3').classList.add('active');
+
+            dialogue.innerHTML = "Magnifique miaou ! 🎉 Ton token est valide et sécurisé. Ton bot est connecté au backend Render, tu peux gérer tes tickets, tes jeux et l'inviter sur ton serveur ! 🚀";
         }
     </script>
 
