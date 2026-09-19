@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YodoProtect - Dashboard Créateur No-Code</title>
+    <title>YodoProtect - Créateur de Bots Discord No-Code</title>
     <style>
         :root {
-            --bg-main: #090d16;
-            --bg-sidebar: #0e1626;
-            --card-bg: #131c31;
+            --bg-main: #070913;
+            --bg-sidebar: #0b1120;
+            --card-bg: #0f172a;
             --accent: #3b82f6;
             --accent-hover: #2563eb;
             --text-main: #f8fafc;
@@ -23,13 +23,100 @@
             background-color: var(--bg-main);
             color: var(--text-main);
             margin: 0;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
+            padding: 0;
             box-sizing: border-box;
         }
+
+        /* --- ÉTAPE 1 : PAGE D'INTRODUCTION / INSTRUCTIONS --- */
+        #intro-container {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+        .hero-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+        .hero-title span { color: var(--accent); }
+        .hero-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+        }
+        .step-box {
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1.2rem;
+            align-items: flex-start;
+        }
+        .step-number {
+            background: var(--accent);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .step-content h3 { margin: 0 0 0.4rem 0; font-size: 1.2rem; }
+        .step-content p { margin: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; }
+        
+        .token-input-section {
+            margin-top: 2rem;
+            background: #020617;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        .token-input-section input {
+            width: 100%;
+            max-width: 500px;
+            padding: 0.9rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+        }
+        .btn-main {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .btn-main:hover { background: var(--accent-hover); transform: translateY(-2px); }
+
+        /* --- ÉTAPE 2 : LE DASHBOARD COMPLET (Caché au début) --- */
+        #dashboard-container {
+            display: none;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
         aside {
-            width: 260px;
+            width: 280px;
             background-color: var(--bg-sidebar);
             border-right: 1px solid var(--border);
             display: flex;
@@ -38,26 +125,21 @@
             padding: 1.5rem;
         }
         .logo {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 900;
             color: var(--accent);
             display: flex;
             align-items: center;
             gap: 0.6rem;
             text-decoration: none;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
         }
-        .menu {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            flex-grow: 1;
-        }
+        .menu { display: flex; flex-direction: column; gap: 0.4rem; flex-grow: 1; }
         .menu-item {
             color: var(--text-muted);
             text-decoration: none;
-            padding: 0.8rem 1rem;
-            border-radius: 8px;
+            padding: 0.9rem 1rem;
+            border-radius: 10px;
             font-weight: 500;
             display: flex;
             align-items: center;
@@ -65,15 +147,14 @@
             transition: all 0.2s;
             cursor: pointer;
         }
-        .menu-item:hover, .menu-item.active {
-            background-color: var(--accent);
-            color: white;
-        }
-        main {
+        .menu-item:hover, .menu-item.active { background-color: var(--accent); color: white; }
+        
+        main-dash {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
+            background-color: var(--bg-main);
         }
         header {
             padding: 1.5rem 2.5rem;
@@ -81,181 +162,254 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: var(--bg-main);
         }
-        header h1 {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-        .badge-pro {
-            background: linear-gradient(135deg, var(--accent), var(--purple));
-            color: white;
+        .status-badge {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
             padding: 0.4rem 1rem;
             border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-        }
-        .dashboard-content {
-            padding: 2.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .section-box {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-        .section-box h2 {
-            margin-top: 0;
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-        .modules-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-        .module-card {
-            background: #0b111e;
+        .status-dot { width: 8px; height: 8px; background-color: var(--success); border-radius: 50%; box-shadow: 0 0 8px var(--success); }
+
+        .dash-content { padding: 2.5rem; max-width: 1100px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+
+        .panel-card {
+            background-color: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
         }
-        .module-card h4 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1.1rem;
+        .panel-card h2 { margin-top: 0; font-size: 1.4rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+        .panel-card p { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.95rem; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-group label { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
+        .form-group input, .form-group select, .form-group textarea {
+            background-color: #020617; border: 1px solid var(--border); padding: 0.8rem 1rem; border-radius: 8px; color: white; font-size: 0.95rem; font-family: inherit;
         }
-        .module-card p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin: 0 0 1.5rem 0;
+        .form-group textarea { resize: vertical; height: 100px; }
+        
+        .module-toggle-card {
+            background: #0b111e; border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;
         }
-        .toggle-switch {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        .toggle-switch input {
-            accent-color: var(--success);
-            width: 18px;
-            height: 18px;
-        }
-        .btn-action {
-            background-color: var(--accent);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .btn-action:hover {
-            background-color: var(--accent-hover);
-        }
+        .btn-save { background-color: var(--success); color: white; border: none; padding: 0.8rem 1.8rem; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .btn-save:hover { background: #059669; }
     </style>
 </head>
 <body>
 
-    <aside>
-        <div>
-            <a href="#" class="logo">
-                🛡️ YodoProtect
-            </a>
-            <div class="menu">
-                <a href="#" class="menu-item active">🤖 Mon Bot</a>
-                <a href="#" class="menu-item">⚡ Commandes Slash (/)</a>
-                <a href="#" class="menu-item">🛡️ Modules de Sécurité</a>
-                <a href="#" class="menu-item">🎫 Système de Tickets</a>
-                <a href="#" class="menu-item">⚙️ Paramètres</a>
+    <!-- ================= ÉTAPE 1 : INSTRUCTIONS DE CRÉATION ================= -->
+    <div id="intro-container">
+        <div class="hero-title">🛡️ Crée ton bot avec <span>YodoProtect</span></div>
+        <div class="hero-subtitle">Suis ces étapes simples pour connecter ton propre bot Discord à notre infrastructure 24h/24.</div>
+
+        <div class="step-box">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3>Crée ton application sur Discord</h3>
+                <p>Rends-toi sur le <a href="https://discord.com/developers/applications" target="_blank" style="color: var(--accent);">Discord Developer Portal</a>, clique sur <b>"New Application"</b>, donne-lui un nom (ex: <i>MonSuperBot</i>) et valide.</p>
             </div>
         </div>
-        <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">
-            YodoProtect v2.0 Ultra
+
+        <div class="step-box">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3>Génère ton Token Secret</h3>
+                <p>Dans l'onglet <b>Bot</b> de ton application, clique sur <b>"Reset Token"</b> et copie ta clé secrète (le Token). C'est la clé qui permet à YodoProtect de faire fonctionner ton bot.</p>
+            </div>
         </div>
-    </aside>
 
-    <main>
-        <header>
-            <h1>Gestion de votre Bot Discord</h1>
-            <div class="badge-pro">EXCLUSIVITÉ YODOPROTECT</div>
-        </header>
+        <div class="step-box">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3>Active les Intents Privilégiés</h3>
+                <p>Sur cette même page Bot, descends un peu et active les options <b>"Presence Intent"</b>, <b>"Server Members Intent"</b> et <b>"Message Content Intent"</b>, puis sauvegarde.</p>
+            </div>
+        </div>
 
-        <div class="dashboard-content">
-            
-            <!-- Informations de base -->
-            <div class="section-box">
-                <h2>🔑 Informations & Token</h2>
-                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Connectez votre application Discord pour l'alimenter avec les modules YodoProtect 24h/24.</p>
-                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
-                    <input type="password" value="MTM0NTc0NTI5MzQ0MDU4MTY0NA.G... (Token Sécurisé)" style="background: #0b111e; border: 1px solid var(--border); padding: 0.8rem; border-radius: 8px; color: white;" readonly>
-                    <button class="btn-action">Mettre à jour le Token</button>
+        <div class="token-input-section">
+            <h3 style="margin-top: 0; margin-bottom: 1rem;">✨ Prêt à lancer ton empire ?</h3>
+            <input type="password" id="user-token" placeholder="Colle ton Token Discord ici (ex: MTMz...)" required>
+            <div>
+                <button class="btn-main" onclick="openDashboard()">🚀 Accéder au Dashboard Complet &rarr;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ÉTAPE 2 : LE DASHBOARD PRO ================= -->
+    <div id="dashboard-container" style="display: none;">
+        <aside>
+            <div>
+                <a href="#" class="logo">🛡️ YodoProtect</a>
+                <div class="menu">
+                    <a class="menu-item active" onclick="switchTab('bot-home', this)">🤖 Mon Bot & Infos</a>
+                    <a class="menu-item" onclick="switchTab('welcome-mod', this)">👋 Message de Bienvenue</a>
+                    <a class="menu-item" onclick="switchTab('security-mod', this)">🚨 Sécurité & Anti-Phishing</a>
+                    <a class="menu-item" onclick="switchTab('slash-mod', this)">⚡ Commandes Slash (/)</a>
+                    <a class="menu-item" onclick="switchTab('tickets-mod', this)">🎫 Système de Tickets</a>
                 </div>
             </div>
-
-            <!-- Modules Avancés (Ce qui va battre BotGhost) -->
-            <div class="section-box">
-                <h2>🚀 Modules Actifs (Supérieurs à la concurrence)</h2>
-                <div class="modules-grid">
-                    
-                    <div class="module-card">
-                        <div>
-                            <h4>🛡️ Anti-Raid & Anti-Nuke</h4>
-                            <p>Protège le serveur contre les arrivées massives de bots et les bannissements en chaîne.</p>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked> Activé
-                        </label>
-                    </div>
-
-                    <div class="module-card">
-                        <div>
-                            <h4>🎫 Système de Tickets Pro</h4>
-                            <p>Permet à vos membres d'ouvrir des salons privés de support avec des boutons interactifs.</p>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked> Activé
-                        </label>
-                    </div>
-
-                    <div class="module-card">
-                        <div>
-                            <h4>🔍 Scanner Anti-Phishing Avancé</h4>
-                            <p>Supprime automatiquement les faux liens Nitro et arnaques Steam en temps réel.</p>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked> Activé
-                        </label>
-                    </div>
-
-                    <div class="module-card">
-                        <div>
-                            <h4>👋 Messages de Bienvenue (Embed)</h4>
-                            <p>Accueille les nouveaux membres avec une image personnalisée et un design sur-mesure.</p>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox"> Activé
-                        </label>
-                    </div>
-
-                </div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+                ✨ YodoProtect Engine v2
             </div>
+        </aside>
 
-        </div>
-    </main>
+        <main style="flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto;">
+            <header>
+                <h1 id="page-title" style="margin: 0; font-size: 1.4rem;">🤖 Gestion de votre Bot</h1>
+                <div class="status-badge">
+                    <div class="status-dot"></div>
+                    Instance 24/7 Active
+                </div>
+            </header>
 
+            <div class="dash-content">
+                
+                <!-- TAB 1 : ACCUEIL BOT -->
+                <div id="bot-home" class="tab-pane active">
+                    <div class="panel-card">
+                        <h2>🤖 Paramètres Généraux</h2>
+                        <p>Modifie l'apparence et le comportement global de ton bot en direct.</p>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Nom du Bot</label>
+                                <input type="text" value="MonSuperBot">
+                            </div>
+                            <div class="form-group">
+                                <label>Statut / Activité (Ex: /scan)</label>
+                                <input type="text" value="Protégé par YodoProtect | /scan">
+                            </div>
+                        </div>
+                        <button class="btn-save" onclick="alert('Modifications enregistrées avec succès ! 🎉')">💾 Sauvegarder</button>
+                    </div>
+                </div>
+
+                <!-- TAB 2 : BIENVENUE -->
+                <div id="welcome-mod" class="tab-pane">
+                    <div class="panel-card">
+                        <h2>👋 Module de Bienvenue Personnalisé</h2>
+                        <p>Accueille automatiquement chaque nouveau membre qui rejoint ton serveur avec un beau message et des embeds.</p>
+                        <div class="module-toggle-card">
+                            <div>
+                                <strong>Activer l'accueil des membres</strong>
+                                <div style="font-size: 0.85rem; color: var(--text-muted);">Envoie un message stylé dans le salon choisi</div>
+                            </div>
+                            <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--success);">
+                        </div>
+                        <div class="form-grid" style="margin-top: 1.5rem;">
+                            <div class="form-group">
+                                <label>Salon cible (Nom ou ID)</label>
+                                <input type="text" value="#bienvenue">
+                            </div>
+                            <div class="form-group">
+                                <label>Titre de l'Embed</label>
+                                <input type="text" value="Bienvenue sur le serveur ! 🚀">
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label>Contenu du message (Variables: {user}, {server})</label>
+                            <textarea>Bienvenue {user} sur {server} ! Pense à lire le règlement et à t'amuser bien.</textarea>
+                        </div>
+                        <button class="btn-save" onclick="alert('Paramètres de bienvenue mis à jour ! 🚀')">💾 Enregistrer le module</button>
+                    </div>
+                </div>
+
+                <!-- TAB 3 : SÉCURITÉ -->
+                <div id="security-mod" class="tab-pane">
+                    <div class="panel-card">
+                        <h2>🚨 Bouclier Anti-Phishing & Sécurité</h2>
+                        <p>Empêche les arnaques au faux Nitro, liens malveillants et attaques de raids massifs.</p>
+                        <div class="module-toggle-card">
+                            <div>
+                                <strong>Scanner Anti-Phishing Auto</strong>
+                                <div style="font-size: 0.85rem; color: var(--text-muted);">Supprime instantanément les liens de scam reconnus</div>
+                            </div>
+                            <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--success);">
+                        </div>
+                        <div class="module-toggle-card">
+                            <div>
+                                <strong>Protection Anti-Raid / Anti-Nuke</strong>
+                                <div style="font-size: 0.85rem; color: var(--text-muted);">Bloque les connexions suspectes en cascade</div>
+                            </div>
+                            <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--success);">
+                        </div>
+                        <button class="btn-save" onclick="alert('Sécurité renforcée activée ! 🛡️')">💾 Sauvegarder</button>
+                    </div>
+                </div>
+
+                <!-- TAB 4 : COMMANDES SLASH -->
+                <div id="slash-mod" class="tab-pane">
+                    <div class="panel-card">
+                        <h2>⚡ Commandes Slash ( / )</h2>
+                        <p>Gère toutes les commandes intégrées à ton bot sur Discord.</p>
+                        <div style="background: #020617; padding: 1.2rem; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 1rem;">
+                            <code>/ping</code> — Teste la latence et l'état du bot 🟢 (Actif)
+                        </div>
+                        <div style="background: #020617; padding: 1.2rem; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 1rem;">
+                            <code>/scan</code> — Analyse un lien suspect en temps réel 🔍 (Actif)
+                        </div>
+                        <div style="background: #020617; padding: 1.2rem; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 1.5rem;">
+                            <code>/ban</code> & <code>/clear</code> — Outils de modération rapide 🧹 (Actif)
+                        </div>
+                        <button class="btn-save" onclick="alert('Commandes synchronisées avec Discord ! ⚡')">🔄 Synchroniser avec Discord</button>
+                    </div>
+                </div>
+
+                <!-- TAB 5 : TICKETS -->
+                <div id="tickets-mod" class="tab-pane">
+                    <div class="panel-card">
+                        <h2>🎫 Système de Tickets Intéractif</h2>
+                        <p>Permet à vos membres d'ouvrir un salon de support privé via un bouton.</p>
+                        <div class="module-toggle-card">
+                            <div>
+                                <strong>Activer les tickets par boutons</strong>
+                                <div style="font-size: 0.85rem; color: var(--text-muted);">Génère un panneau de création automatique</div>
+                            </div>
+                            <input type="checkbox" style="width: 20px; height: 20px; accent-color: var(--success);">
+                        </div>
+                        <div class="form-group" style="margin: 1.5rem 0;">
+                            <label>Salon d'envoi du panneau</label>
+                            <input type="text" value="#support">
+                        </div>
+                        <button class="btn-save" onclick="alert('Configuration des tickets sauvegardée ! 🎫')">💾 Enregistrer</button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function openDashboard() {
+            const token = document.getElementById('user-token').value.trim();
+            if(!token) {
+                alert('⚠️ Veuillez entrer votre Token Discord pour continuer !');
+                return;
+            }
+            // Masquer l'intro et afficher le Dashboard
+            document.getElementById('intro-container').style.display = 'none';
+            document.getElementById('dashboard-container').style.display = 'flex';
+        }
+
+        function switchTab(tabId, element) {
+            // Changer l'onglet actif dans le contenu
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+
+            // Changer le style de l'élément cliqué dans le menu
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+        }
+    </script>
 </body>
 </html>
