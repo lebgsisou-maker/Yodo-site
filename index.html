@@ -9,8 +9,8 @@
             --bg-main: #070913;
             --bg-sidebar: #0b0f1d;
             --card-bg: #111827;
-            --accent: #3b82f6;
-            --accent-glow: rgba(59, 130, 246, 0.4);
+            --accent: #f59e0b; /* Orange/Or façon lion */
+            --accent-glow: rgba(245, 158, 11, 0.3);
             --danger: #ef4444;
             --success: #10b981;
             --text-main: #f9fafb;
@@ -23,10 +23,9 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); }
-            50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.5); }
-            100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
         body {
@@ -38,11 +37,11 @@
             box-sizing: border-box;
         }
 
-        /* --- ACCUEIL AVEC MASCOTTE LION & ANIMATION --- */
+        /* --- ACCUEIL AVEC VRAIE MASCOTTE ILLUSTRÉE & BULLE DE DIALOGUE --- */
         #intro-container {
-            max-width: 900px;
-            margin: 4rem auto;
-            padding: 3.5rem;
+            max-width: 950px;
+            margin: 3rem auto;
+            padding: 3rem;
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 28px;
@@ -50,61 +49,89 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
         }
 
-        .lion-banner {
+        .hero-banner {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
+            gap: 2rem;
             background: linear-gradient(135deg, #1e293b, #0f172a);
             border: 1px solid var(--border);
-            padding: 1.5rem 2rem;
-            border-radius: 20px;
+            padding: 2rem;
+            border-radius: 24px;
             margin-bottom: 2.5rem;
-            animation: pulseGlow 4s infinite;
         }
 
-        .lion-avatar {
-            font-size: 3rem;
-            background: rgba(59, 130, 246, 0.15);
-            width: 75px;
-            height: 75px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* Style de la mascotte illustration (Lion) */
+        .mascot-container {
+            flex-shrink: 0;
+            text-align: center;
+        }
+        .mascot-img {
+            width: 110px;
+            height: 110px;
+            object-fit: cover;
             border-radius: 50%;
-            border: 2px solid var(--accent);
+            border: 3px solid var(--accent);
+            animation: bounce 3s infinite ease-in-out;
+            box-shadow: 0 0 20px var(--accent-glow);
+            background: #f59e0b;
         }
 
-        .lion-dialogue h3 {
+        /* Bulle de dialogue façon jeu vidéo */
+        .speech-bubble {
+            position: relative;
+            background: #090d16;
+            border: 1px solid var(--border);
+            padding: 1.2rem 1.5rem;
+            border-radius: 16px;
+            flex-grow: 1;
+        }
+        .speech-bubble h3 {
             margin: 0 0 0.4rem 0;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--accent);
         }
-
-        .lion-dialogue p {
+        .speech-bubble p {
             margin: 0;
             color: var(--text-muted);
             font-size: 0.95rem;
             line-height: 1.5;
         }
 
-        .hero-title {
-            font-size: 3rem;
-            font-weight: 900;
-            letter-spacing: -0.03em;
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 800;
             margin-bottom: 1rem;
-            text-align: center;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
-        .hero-title span { color: var(--accent); }
 
-        .hero-desc {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            text-align: center;
-            margin-bottom: 3rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+        /* Guide étape par étape détaillé */
+        .guide-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.2rem;
+            margin-bottom: 2.5rem;
         }
+        .step-card {
+            background: #090d16;
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 16px;
+        }
+        .step-number {
+            display: inline-block;
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent);
+            font-weight: 800;
+            padding: 0.3rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
+        }
+        .step-card h4 { margin: 0 0 0.5rem 0; font-size: 1rem; }
+        .step-card p { margin: 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
 
         .token-box {
             background: #090d16;
@@ -113,7 +140,6 @@
             border-radius: 20px;
             text-align: center;
         }
-
         .token-box input {
             width: 100%;
             max-width: 500px;
@@ -127,10 +153,7 @@
             outline: none;
             transition: all 0.3s;
         }
-        .token-box input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
+        .token-box input:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
 
         #error-msg {
             color: var(--danger);
@@ -138,28 +161,23 @@
             font-weight: 600;
             margin-bottom: 1rem;
             display: none;
-            animation: fadeIn 0.3s ease-out;
         }
 
         .btn-glow {
             background: var(--accent);
-            color: white;
+            color: #000;
             border: none;
             padding: 1rem 2.8rem;
             border-radius: 12px;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 1.05rem;
             cursor: pointer;
             transition: all 0.3s;
             box-shadow: 0 10px 25px -5px var(--accent-glow);
         }
-        .btn-glow:hover {
-            transform: translateY(-3px);
-            background: #2563eb;
-            box-shadow: 0 15px 30px -5px var(--accent-glow);
-        }
+        .btn-glow:hover { transform: translateY(-3px); background: #d97706; }
 
-        /* --- DASHBOARD PRO CARRÉ --- */
+        /* --- DASHBOARD PRO AVEC GUIDE INTÉGRÉ DE LA MASCOTTE --- */
         #dashboard-container {
             display: none;
             height: 100vh;
@@ -178,65 +196,21 @@
             padding: 2rem;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            font-size: 1.4rem;
-            font-weight: 800;
-            margin-bottom: 2.5rem;
-        }
+        .brand { font-size: 1.4rem; font-weight: 800; margin-bottom: 2.5rem; color: var(--accent); }
 
         .menu { display: flex; flex-direction: column; gap: 0.6rem; }
         .menu-item {
-            color: var(--text-muted);
-            text-decoration: none;
-            padding: 1rem 1.2rem;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            transition: all 0.2s;
-            cursor: pointer;
+            color: var(--text-muted); text-decoration: none; padding: 1rem 1.2rem; border-radius: 12px; font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 1rem; transition: all 0.2s; cursor: pointer;
         }
-        .menu-item:hover, .menu-item.active {
-            background-color: var(--accent);
-            color: white;
-            transform: translateX(4px);
-        }
+        .menu-item:hover, .menu-item.active { background-color: var(--accent); color: #000; font-weight: 700; transform: translateX(4px); }
 
-        main {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            background-color: var(--bg-main);
-        }
+        main { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; background-color: var(--bg-main); }
 
         header {
-            padding: 1.8rem 3.5rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(11, 15, 29, 0.5);
-            backdrop-filter: blur(10px);
+            padding: 1.8rem 3.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(11, 15, 29, 0.5); backdrop-filter: blur(10px);
         }
 
-        .badge-live {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--success);
-            color: var(--success);
-            padding: 0.6rem 1.4rem;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
+        .badge-live { background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success); color: var(--success); padding: 0.6rem 1.4rem; border-radius: 30px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.8rem; }
         .dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success); }
 
         .dash-content { padding: 3.5rem; max-width: 1200px; margin: 0 auto; width: 100%; box-sizing: border-box; }
@@ -244,12 +218,7 @@
         .tab-pane.active { display: block; animation: fadeIn 0.3s ease-out; }
 
         .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         .card h2 { margin-top: 0; font-size: 1.6rem; font-weight: 800; margin-bottom: 0.6rem; }
         .card p { color: var(--text-muted); margin-bottom: 2rem; font-size: 0.95rem; }
@@ -263,62 +232,88 @@
         .field input:focus, .field textarea:focus { border-color: var(--accent); }
         .field textarea { height: 120px; resize: vertical; }
 
-        .toggle-box {
-            background: #070913; border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;
-        }
+        .toggle-box { background: #070913; border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; }
 
-        .btn-save {
-            background-color: var(--success); color: white; border: none; padding: 1rem 2.5rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
-        }
+        .btn-save { background-color: var(--success); color: white; border: none; padding: 1rem 2.5rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
         .btn-save:hover { background: #059669; transform: translateY(-2px); }
+
+        /* Boîte de dialogue de la mascotte dans le dashboard */
+        .mascot-tip {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid var(--accent);
+            border-radius: 16px;
+            padding: 1.2rem 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .mascot-tip img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        .mascot-tip span { font-size: 0.95rem; color: var(--text-main); line-height: 1.4; }
     </style>
 </head>
 <body>
 
-    <!-- ================= ACCUEIL / MASCOTTE LION ================= -->
+    <!-- ================= ÉTAPE 1 : ACCUEIL & GUIDE DU LION ================= -->
     <div id="intro-container">
-        <div class="lion-banner">
-            <div class="lion-avatar">🦁</div>
-            <div class="lion-dialogue">
-                <h3>Yo c'est Yodo !</h3>
-                <p>Bienvenue sur YodoProtect. Pour lancer ton bot sur notre moteur Render 24/7, récupère ton Token sur le Discord Developer Portal et colle-le juste en bas pour accéder à ton dashboard pro !</p>
+        <div class="hero-banner">
+            <div class="mascot-container">
+                <!-- Utilisation de l'image de la mascotte style costume pro de lion -->
+                <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=150" alt="Yodo Mascot" class="mascot-img" id="mascot-face">
+            </div>
+            <div class="speech-bubble">
+                <h3 id="speech-title">Yo, c'est Yodo ! 🦁</h3>
+                <p id="speech-text">Bienvenue sur YodoProtect. Je vais t'aider à configurer ton propre bot en quelques clics sans prise de tête. Regarde les étapes ci-dessous pour créer ton application sur Discord !</p>
             </div>
         </div>
 
-        <div class="hero-title">Crée ton bot <span>sans coder</span></div>
-        <div class="hero-desc">La plateforme ultra-rapide pour configurer, sécuriser et propulser ton bot Discord en quelques secondes.</div>
+        <div class="section-title">📖 Guide Étape par Étape pour créer ton Bot</div>
+        <div class="guide-steps">
+            <div class="step-card">
+                <span class="step-number">Étape 1</span>
+                <h4>Developer Portal</h4>
+                <p>Va sur le site officiel <strong>Discord Developer Portal</strong>, clique sur "New Application" et donne-lui un nom.</p>
+            </div>
+            <div class="step-card">
+                <span class="step-number">Étape 2</span>
+                <h4>Création du Bot</h4>
+                <p>Va dans l'onglet "Bot" à gauche, clique sur "Add Bot", active les options de messages et de texte en bas.</p>
+            </div>
+            <div class="step-card">
+                <span class="step-number">Étape 3</span>
+                <h4>Récupérer le Token</h4>
+                <p>Copie ton <strong>Token secret</strong>. C'est la clé magique pour connecter ton bot sur notre moteur Render 24/7 !</p>
+            </div>
+        </div>
 
         <div class="token-box">
-            <h3 style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.3rem;">Connexion au Dashboard</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Entre un vrai Token Discord valide (commençant généralement par MTM... ou OT...)</p>
+            <h3 style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.3rem;">Connexion au Dashboard Pro</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Colle ton vrai Token Discord ci-dessous pour débloquer ton panneau de contrôle.</p>
             
-            <input type="password" id="user-token" placeholder="Colle ton token Discord ici...">
-            <div id="error-msg">⚠️ Token invalide ! Entre un vrai token Discord correct pour continuer.</div>
+            <input type="password" id="user-token" placeholder="MTMzNzUwNj... (Colle ton token ici)">
+            <div id="error-msg">⚠️ Oups ! Ce n'est pas un vrai token. Entre un token Discord valide (long et avec des points).</div>
             
             <div>
-                <button class="btn-glow" onclick="validateAndOpenDashboard()">Lancer le Dashboard &rarr;</button>
+                <button class="btn-glow" onclick="validateAndOpenDashboard()">Valider le Token &rarr;</button>
             </div>
         </div>
     </div>
 
-    <!-- ================= DASHBOARD PRO ================= -->
+    <!-- ================= ÉTAPE 2 : DASHBOARD AVEC VISITE GUIDÉE DU LION ================= -->
     <div id="dashboard-container" style="display: none;">
         <aside>
             <div>
-                <div class="brand">
-                    <span>🦁 YodoProtect</span>
-                </div>
+                <div class="brand">🦁 YodoProtect</div>
                 <div class="menu">
-                    <a class="menu-item active" onclick="switchTab('tab-general', this)">⚙️ Général</a>
-                    <a class="menu-item" onclick="switchTab('tab-welcome', this)">👋 Bienvenue</a>
-                    <a class="menu-item" onclick="switchTab('tab-security', this)">🛡️ Sécurité</a>
-                    <a class="menu-item" onclick="switchTab('tab-slash', this)">⚡ Commandes Slash</a>
-                    <a class="menu-item" onclick="switchTab('tab-tickets', this)">🎫 Tickets</a>
+                    <a class="menu-item active" onclick="switchTab('tab-general', this, 'Bienvenue dans les paramètres généraux ! C\'est ici que tu changes le nom de ton bot.')">⚙️ Général</a>
+                    <a class="menu-item" onclick="switchTab('tab-welcome', this, 'Le module de bienvenue ! Parfait pour envoyer une carte stylée quand quelqu\'un rejoint.')">👋 Bienvenue</a>
+                    <a class="menu-item" onclick="switchTab('tab-security', this, 'Le bouclier de sécurité ! Il bloque automatiquement les liens de phishing et les arnaques.')">🛡️ Sécurité</a>
+                    <a class="menu-item" onclick="switchTab('tab-slash', this, 'Les commandes slash ! Teste la latence avec /ping directement sur ton serveur.')">⚡ Commandes Slash</a>
+                    <a class="menu-item" onclick="switchTab('tab-tickets', this, 'Le système de tickets ! Pour permettre aux membres de contacter le staff en privé.')">🎫 Tickets</a>
                 </div>
             </div>
             <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center; border-top: 1px solid var(--border); padding-top: 1.5rem;">
-                Moteur Render • 24/7 Actif
+                Moteur Render 24/7 Actif
             </div>
         </aside>
 
@@ -332,7 +327,12 @@
             </header>
 
             <div class="dash-content">
-                
+                <!-- Bulle de dialogue interactive du lion dans le dashboard -->
+                <div class="mascot-tip">
+                    <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=150" alt="Yodo Mascot">
+                    <span id="dashboard-mascot-text">Bravo boss ! Ton token a été accepté avec succès. Tu es maintenant sur ton dashboard pro. Clique sur les menus à gauche pour configurer ton bot !</span>
+                </div>
+
                 <!-- TAB 1 : GENERAL -->
                 <div id="tab-general" class="tab-pane active">
                     <div class="card">
@@ -414,58 +414,4 @@
                             <code>/ping — Teste la latence instantanée</code>
                             <span style="color: var(--success); font-weight: 600; font-size: 0.85rem;">Actif</span>
                         </div>
-                        <div style="background: #070913; padding: 1.2rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
-                            <code>/ban — Exclut un membre proprement</code>
-                            <span style="color: var(--success); font-weight: 600; font-size: 0.85rem;">Actif</span>
-                        </div>
-                        <button class="btn-save" onclick="alert('Commandes synchronisées avec Discord !')">Synchroniser</button>
-                    </div>
-                </div>
-
-                <!-- TAB 5 : TICKETS -->
-                <div id="tab-tickets" class="tab-pane">
-                    <div class="card">
-                        <h2>Système de Tickets</h2>
-                        <p>Permet d'ouvrir un salon privé de support via un bouton.</p>
-                        <div class="toggle-box">
-                            <div>
-                                <strong style="font-size: 1rem;">Activer le panneau de tickets</strong>
-                                <div style="font-size: 0.85rem; color: var(--text-muted);">Crée un embed avec bouton d'ouverture</div>
-                            </div>
-                            <input type="checkbox" style="width: 22px; height: 22px; accent-color: var(--success);">
-                        </div>
-                        <div class="field" style="margin: 1.5rem 0;">
-                            <label>Salon d'affichage</label>
-                            <input type="text" value="#support">
-                        </div>
-                        <button class="btn-save" onclick="alert('Tickets enregistrés !')">Sauvegarder</button>
-                    </div>
-                </div>
-
-            </div>
-        </main>
-    </div>
-
-    <script>
-        function validateAndOpenDashboard() {
-            const token = document.getElementById('user-token').value.trim();
-            const errorMsg = document.getElementById('error-msg');
-
-            // Vérification rigoureuse : un vrai token fait au moins 50 caractères et contient des points
-            if (token.length < 40 || !token.includes('.')) {
-                errorMsg.style.display = 'block';
-                document.getElementById('user-token').style.borderColor = 'var(--danger)';
-                return;
-            }
-
-            errorMsg.style.display = 'none';
-            document.getElementById('intro-container').style.display = 'none';
-            document.getElementById('dashboard-container').style.display = 'flex';
-        }
-
-        function switchTab(tabId, element) {
-            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-
-            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-            element.classList.a
+                        <div style="background: #070913; padding: 1.2rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 1.5rem; display: flex; justify-content: space-between
