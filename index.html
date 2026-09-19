@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YodoProtect - Site en Maintenance</title>
+    <title>YodoProtect - Créer ton Bot Discord</title>
     <style>
         :root {
             --bg-color: #070913;
@@ -15,6 +15,7 @@
             --border: #1e293b;
             --discord: #5865F2;
             --discord-hover: #4752C4;
+            --success: #10b981;
         }
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -23,91 +24,225 @@
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
             min-height: 100vh;
-            text-align: center;
         }
-        .maintenance-container {
+        header {
             background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 3rem 2rem;
-            border-radius: 20px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
         .logo {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 900;
             color: var(--accent);
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-        h1 {
-            font-size: 1.6rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            color: var(--text-main);
-        }
-        p {
-            color: var(--text-muted);
-            line-height: 1.6;
-            font-size: 1rem;
-            margin-bottom: 2rem;
-        }
-        .badge-maintenance {
-            display: inline-block;
-            background: rgba(59, 130, 246, 0.15);
-            color: var(--accent);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
+            text-decoration: none;
         }
         .btn-discord {
             background: var(--discord);
             color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 10px;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
             font-weight: 700;
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
             transition: background 0.2s;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         .btn-discord:hover {
             background: var(--discord-hover);
+        }
+        main {
+            flex: 1;
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+        .step-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+        }
+        .step-number {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 5rem;
+            font-weight: 900;
+            color: rgba(59, 130, 246, 0.05);
+            pointer-events: none;
+        }
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .badge-step {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        h3 {
+            margin: 0;
+            font-size: 1.3rem;
+            color: var(--text-main);
+        }
+        p, li {
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+        ul {
+            padding-left: 1.2rem;
+            margin: 0.5rem 0;
+        }
+        .code-box {
+            background: #03050a;
+            border: 1px solid var(--border);
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            color: #38bdf8;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+        .external-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .external-link:hover {
+            text-decoration: underline;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: auto;
         }
     </style>
 </head>
 <body>
 
-    <div class="maintenance-container">
-        <div class="logo">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+    <header>
+        <a href="#" class="logo">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
             YodoProtect
-        </div>
-
-        <div>
-            <span class="badge-maintenance">🛠️ Site en Maintenance</span>
-        </div>
-
-        <h1>Nous faisons peau neuve</h1>
-        <p>Notre plateforme est actuellement indisponible le temps d'optimiser l'interface et d'assurer une compatibilité totale sur tous les appareils. Revenez très vite !</p>
-
-        <a href="https://discord.gg/upbS8cvNSB" target="_blank" class="btn-discord">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2z"></path><line x1="9" y1="12" x2="15" y2="12"></line></svg>
-            Rejoindre le Discord en attendant
         </a>
-    </div>
+        <a href="https://discord.gg/upbS8cvNSB" target="_blank" class="btn-discord">Support Discord</a>
+    </header>
+
+    <main>
+        <h1>Crée ton Bot Discord</h1>
+        <p class="subtitle">Suis ces quelques étapes simples pour configurer ton application avant de profiter des fonctionnalités avancées de YodoProtect.</p>
+
+        <!-- Étape 1 -->
+        <div class="step-card">
+            <div class="step-number">01</div>
+            <div class="step-header">
+                <span class="badge-step">Étape 1</span>
+                <h3>Créer l'application sur Discord</h3>
+            </div>
+            <p>Rends-toi d'abord sur le <a href="https://discord.com/developers/applications" target="_blank" class="external-link">Portail Développeur Discord</a>.</p>
+            <ul>
+                <li>Connecte-toi avec ton compte Discord.</li>
+                <li>Clique sur le bouton en haut à droite <strong>"New Application"</strong>.</li>
+                <li>Choisis un nom pour ton bot (ex: <em>YodoProtect Bot</em>), coche la case des conditions et clique sur <strong>Create</strong>.</li>
+            </ul>
+        </div>
+
+        <!-- Étape 2 -->
+        <div class="step-card">
+            <div class="step-number">02</div>
+            <div class="step-header">
+                <span class="badge-step">Étape 2</span>
+                <h3>Transformer l'application en Bot</h3>
+            </div>
+            <p>Maintenant que ton application est créée, il faut lui donner vie :</p>
+            <ul>
+                <li>Dans le menu de gauche, clique sur l'onglet <strong>Bot</strong>.</li>
+                <li>Clique sur <strong>Reset Token</strong> (ou <em>Add Bot</em> si l'option apparaît) pour générer le code secret de ton bot.</li>
+                <li><strong>Attention :</strong> Copie bien ce token et garde-le secret, ne le partage jamais à personne !</li>
+            </ul>
+        </div>
+
+        <!-- Étape 3 -->
+        <div class="step-card">
+            <div class="step-number">03</div>
+            <div class="step-header">
+                <span class="badge-step">Étape 3</span>
+                <h3>Activer les Intents Privilégiés</h3>
+            </div>
+            <p>Pour que YodoProtect puisse analyser les messages, gérer la sécurité et voir l'arrivée des membres :</p>
+            <ul>
+                <li>Sur la même page (onglet <strong>Bot</strong>), descends tout en bas dans la section <strong>Privileged Gateway Intents</strong>.</li>
+                <li>Coche impérativement ces trois options :
+                    <ul>
+                        <li>Presence Intent</li>
+                        <li>Server Members Intent</li>
+                        <li>Message Content Intent</li>
+                    </ul>
+                </li>
+                <li>Clique sur <strong>Save Changes</strong> en bas de la page.</li>
+            </ul>
+        </div>
+
+        <!-- Étape 4 -->
+        <div class="step-card">
+            <div class="step-number">04</div>
+            <div class="step-header">
+                <span class="badge-step">Étape 4</span>
+                <h3>Inviter le bot sur ton serveur</h3>
+            </div>
+            <p>Il ne reste plus qu'à l'ajouter chez toi :</p>
+            <ul>
+                <li>Va dans l'onglet <strong>OAuth2</strong> > <strong>URL Generator</strong> dans le menu de gauche.</li>
+                <li>Dans <em>Scopes</em>, coche la case <div class="code-box">bot</div>.</li>
+                <li>Dans <em>Bot Permissions</em>, sélectionne les permissions nécessaires (ex: <em>Administrator</em> pour un contrôle total de sécurité).</li>
+                <li>Copie le lien généré tout en bas, ouvre-le dans ton navigateur et invite le bot sur ton serveur Discord !</li>
+            </ul>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 YodoProtect - Propulsé pour la sécurité de vos communautés.</p>
+    </footer>
 
 </body>
 </html>
